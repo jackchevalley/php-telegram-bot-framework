@@ -18,7 +18,7 @@ function load_env(): void {
         die("Environment file .env not found at $file_path");
     }
 
-    $dotenv = Dotenv::createImmutable(__DIR__ . '/../data');
+    $dotenv = Dotenv::createImmutable($file_path);
     $dotenv->load();
 
     $env_loaded = true;

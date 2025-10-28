@@ -60,16 +60,7 @@ if (!(isset($chatID) and is_numeric($chatID))) exit();
 require_once 'public/database.php';
 
 try {
-    // Handle payments callback
-    if (isset($update['pre_checkout_query'])) {
-        require_once 'public/payments/payments_callback.php';
-    }
-
-    // Handle anything else
-    else {
-        require_once 'comandi.php';
-    }
-
+    require_once 'comandi.php';
 } finally {
     closeDbConnection();
 //    closeRedisConnection();

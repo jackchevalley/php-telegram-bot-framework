@@ -24,7 +24,7 @@ if (true) {
 
     //Amministratori - verifica se l'utente corrente è un admin
     $is_admin = in_array($userID, $ADMINS);
-    $adm = $is_admin ? $userID : $ADMINS[0]; // Usa il primo admin della lista come fallback
+    $adm = $is_admin ? $userID : $MAIN_ADMIN;
 
 
     // Utili da usare nei testi e nei bottoni, emp sarebbe il carattere invisibile

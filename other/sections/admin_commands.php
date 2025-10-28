@@ -38,8 +38,16 @@ if (isset($msg)) {
                 die();
             }
 
+
+            // more admin commands here...
+        }
+
+
+        // Comandi riservati a tutti i componenti del gruppo GENERIC_ADMIN_CHAT
+        if ($userID == $adm or $chatID == $GENERIC_ADMIN_CHAT_ID) {
+
             // Status del server e delle richieste
-            elseif ($msg == '/status') {
+            if ($msg == '/status') {
                 require_once __DIR__ . '/../../public/metrics_functions.php';
 
                 // Raccogli tutte le metriche
@@ -94,12 +102,8 @@ if (isset($msg)) {
                 sm($chatID, $text, $inline_menu);
             }
 
-        }
 
-
-        // Comandi riservati a tutti i componenti del gruppo GENERIC_ADMIN_CHAT
-        if ($userID == $adm or $chatID == $GENERIC_ADMIN_CHAT_ID) {
-            echo "Implement admin group commands here";
+            // more commands in the admin group here...
         }
 
     }
