@@ -8,15 +8,15 @@ I've been using and improving it for years and almost every bot I create is base
 
 ## ✨ Features
 
-- **Fast webhook-based architecture** - Handles the update and closes connection with telegram quickly. There is a filter to make sure only real telegram requests are processed.
-- **Database integration** - MySQL/MariaDB support with prepared functions for secure queries, transactions and user management. Fully with PDO
+- **Fast webhook-based architecture** - Handles updates and closes the connection with Telegram quickly. Includes a filter to ensure only real Telegram requests are processed
+- **Database integration** - MySQL/MariaDB support with prepared functions for secure queries, transactions, and user management. Fully built with PDO
 - **Built-in cron system** - Schedule recurring tasks without external dependencies
-- **Admin panel** - Separate admin commands and permission system for managing the bot, users and possibile admin groups
-- **System metrics** - Monitor CPU, RAM, disk usage, and performance over a simple command accessibile from the bot
+- **Admin panel** - Separate admin commands and permission system for managing the bot, users, and possible admin groups
+- **System metrics** - Monitor CPU, RAM, disk usage, and performance via a simple command accessible from the bot to the admins
 - **Security** - IP verification, input sanitization, and secure database queries
 - **Easy message handling** - Simplified API functions for sending messages, photos, videos, and more
 - **Multi-environment support** - `.env` configuration for different deployments
-- **Media and Input support** - Handle any input: text inputs, photos, videos, audio, documents...
+- **Media and input support** - Handle any input: text, photos, videos, audio, documents, and more
 - **User management** - Automatic user registration and profile updates
 - **User blocking system** - Built-in blocked users management
 
@@ -51,13 +51,13 @@ Copy the example environment file and edit it:
 cp data/.env.example data/.env
 ```
 
-<u>Remember to Edit</u> `data/.env` with your configuration.
-Here you will set up the token of the bot, database credentials (if used), and other settings.
+**Remember to edit** `data/.env` with your configuration.
+Here you will set up the bot token, database credentials (if used), and other settings.
 
 
 ### 4. Configure Bot Settings
 
-<u>Edit</u> `public/configs.php`:
+**Edit** `public/configs.php`:
 
 ```php
 // Bot username
@@ -80,7 +80,8 @@ $ADMIN_CHATS = [
     // Add more admin chat IDs here...
 ];
 ```
-Here you have the main bot settings that must be easily and quickly accessible.
+
+Here you have the main bot settings that should be easily and quickly accessible, that's why they are not in `data/.env`
 
 ### 5. Setup Database (if you want)
 
@@ -214,8 +215,8 @@ $inline_menu[] = [
 sm($chatID, $output_text, $inline_menu);
 ```
 
-The inline every element added as `$inline_menu[] = [...]` represents a new row of buttons.
-To insert multiple buttons in the same row, just add more button arrays inside the same array.
+Each element added as `$inline_menu[] = [...]` represents a new row of buttons.
+To insert multiple buttons in the same row, add more button arrays inside the same array.
 
 
 #### Message with Reply Keyboard
@@ -232,18 +233,24 @@ sm($chatID, $text, hard_menu: $hard_menu);
 ```
 
 #### Send and Delete Previous (Clean UI)
-This function sends a new message and deletes the previous one sent by the bot in the same chat (if send using this same function).
+
+This function sends a new message and deletes the previous one sent by the bot in the same chat (if sent using this same function).
+
 ```php
 // Sends new message and deletes the previous one
 smg($chatID, "Updated message", $inline_menu);
 ```
-It can be very useful to keep the chat clean when navigating menus or updating information.
-I suggest to imagine the bot structure like this: 
-- **Main sections messages**: use `smg()` to always have only one message per section, this will avoid users to click old buttons, going back and forth and potentially creating conflicts.
-- **Subsections messages**: this can use normal `sm()` messages to provide additional information without deleting the main section message. 
+
+This can be very useful to keep the chat clean when navigating menus or updating information.
+I suggest imagining the bot structure like this:
+- **Main section messages**: Use `smg()` to always have only one message per section. This prevents users from clicking old buttons, going back and forth, and potentially creating conflicts. For example with input requests.
+- **Subsection messages**: Use normal `sm()` messages to provide additional information without deleting the main section message. 
 
 ### Available Message Functions
-You can find all the functions provided by the framework for sending and managing messages in the public/functions.php file.
+
+You can find all the functions provided by the framework for sending and managing messages in the `public/functions.php` file.
+
+We have included many functions to handle many things but probably some of them are not needed for your specific bot, we suggest to clean up the unused functions to keep your code light and easy to maintain.
 
 ## 💾 Database Usage
 
@@ -267,10 +274,11 @@ The secure function accepts three parameters:
 3. **Fetch Mode** (optional) - Determines the type of result to return
 
 ### Fetch Modes
+
 The `secure()` function supports different fetch modes:
 - **0** (default): No result
 - **1**: Fetch single row, the first one (associative array)
-- **2**: Get row count (number of affected rows), useful to check whether an UPDATE or DELETE affected any rows or for fastly checking the existence of rows
+- **2**: Get row count (number of affected rows), useful to check whether an UPDATE or DELETE affected any rows or for quickly checking the existence of rows
 - **3**: Fetch all rows (array of associative arrays)
 - **4**: Get last insert ID (for INSERT queries)
 
@@ -407,10 +415,11 @@ logger("Daily report sent to " . count($users) . " users");
 ```
 
 
-### Built in broadcast system
+### Built-in Broadcast System
+
 We have included a broadcast module that can be used to send messages to all users in the database.
 You can find it in `other/private/cron/modules/broadcast.php`.
-For now the it's kinda basic and it's not implemented in the admin commands, but you can easily customize it to your needs.
+For now it's fairly basic and not implemented in the admin commands, but you can easily customize it to your needs.
 
 ## 👑 Admin Commands
 
@@ -468,11 +477,11 @@ The limits for warnings and critical alerts should be edited by you according to
 ## 🎨 Commands and Input Handling
 
 The framework, after initializing variables, routes all commands and messages to `comandi.php`.
-Here it will populate some more variables, used only in the commands handling *(the if(true) is just to collapse the code in idles)*. 
+Here it will populate some more variables used only in the commands handling *(the if(true) is just to collapse the code in IDEs)*. 
 
-The code structure splits between messages and media, since messages could be commands but medias for sure are not. 
+The code structure splits between messages and media, since messages could be commands but media cannot. 
 
-After splitting over messages and media, it splits again between commands (starting with /) and potential inputs.
+After splitting messages and media, it splits again between commands (starting with `/`) and potential inputs.
 
 If you are using a Reply Keyboard, you can map buttons to commands using the `$COMMANDS_ALIAS` array.
 
@@ -556,6 +565,186 @@ if ($msg == "/special_action") {
 }
 ```
 
+### Suggested Structure for Commands and Temporary States
+
+I find it very useful to give a distinct structure to commands and their relative temporary states.
+
+Imagine your bot having this structure:
+- **Main Menu**
+- **Settings**
+    - Change Name
+    - Change Language
+- **Support**
+    - Info
+    - Contact
+    - Rules
+
+I suggest structuring your code in sections for better organization and splitting commands from inputs. 
+
+Inside the commands section you can have something like this:
+```php
+
+// Start command
+if ($msg == '/start') {
+    
+    $text = [];
+    $text[] = "<b>Welcome <a href='tg://user?id=$userID'>$nome</a>!</b>";
+    $text[] = "";
+    $text[] = "This is the main menu. Choose an option:";
+    
+    $inline_menu = [];
+    $inline_menu[] = [
+        ['text' => "Settings ⚙️", 'callback_data' => '/settings'],
+        ['text' => "Support 🆘", 'callback_data' => '/support']
+    ];
+    
+    if (isset($cbmid)) {
+        cb_reply($text, $inline_menu);
+    } else {
+        smg($chatID, $text, $inline_menu);
+    }
+    
+    temp(); // Clear any previous state
+}
+
+// Section for settings
+elseif (str_starts_with($msg, '/settings')) {
+
+    // Handler panel of the settings
+    if ($msg == '/settings') {
+        
+        $text = [];
+        $text[] = "<b>Settings</b>";
+        $text[] = "";
+        $text[] = "Choose an option:";
+        
+        $inline_menu = [];
+        $inline_menu[] = [
+            ['text' => "Change Name", 'callback_data' => '/settings_name'],
+            ['text' => "Change Language", 'callback_data' => '/settings_language']
+        ];
+        $inline_menu[] = [
+            ['text' => "Back to Main Menu", 'callback_data' => '/start']
+        ];
+        
+        if (isset($cbmid)) {
+            cb_reply($text, $inline_menu);
+        } else {
+            smg($chatID, $text, $inline_menu);
+        }
+        
+        temp(); // Clear any previous state
+    }
+    
+    // Handler for changing name (request to input)
+    elseif ($msg == '/settings_name') {
+        lock_non_callback();
+        
+        cb_reply("Please insert your name now");
+        temp("settings_name");
+    }
+    
+    // Handler for changing language (click the language)
+    elseif (str_starts_with($msg, '/settings_language')) {
+        lock_non_callback();
+    
+        // Check if a language was selected and save it
+        if (str_starts_with($msg, '/settings_language_select')) {
+            $selected_language = str_replace('/settings_language_select_', '', $msg);
+            
+            secure("UPDATE users SET language = :lang WHERE user_id = :id", [
+                'lang' => $selected_language,
+                'id' => $userID
+            ]);
+            
+            $us['lang'] = $selected_language; // Update local variable
+        }
+        
+        
+        $text = [];
+        $text[] = "<b>Choose your language</b>";
+        $text[] = "";
+        $text[] = "Current language: " . $us['lang'];
+        
+        $inline_menu = [];
+        $inline_menu[] = [
+            ['text' => "English ". bool_to_value($us['lang'] == 'en'), 'callback_data' => '/settings_language_select_en'],
+            ['text' => "Italian ". bool_to_value($us['lang'] == 'it'), 'callback_data' => '/settings_language_select_it']
+        ];
+        
+        $inline_menu[] = [
+            ['text' => "Back to Settings", 'callback_data' => '/settings']
+        ];
+        cb_reply($text, $inline_menu);
+        
+        temp(); // Clear any previous state for safety
+    }
+    
+}
+
+// Section for support
+elseif (str_starts_with($msg, '/support')) {
+    
+    // Main support panel
+    if ($msg == '/support') {
+        
+        $text = [];
+        $text[] = "<b>Support</b>";
+        $text[] = "";
+        $text[] = "Choose an option:";
+        
+        $inline_menu = [];
+        $inline_menu[] = [
+            ['text' => "Info", 'callback_data' => '/support_info'],
+            ['text' => "Contact", 'callback_data' => '/support_contact'],
+            ['text' => "Rules", 'callback_data' => '/support_rules']
+        ];
+        $inline_menu[] = [
+            ['text' => "Back to Main Menu", 'callback_data' => '/start']
+        ];
+        
+        if (isset($cbmid)) {
+            cb_reply($text, $inline_menu);
+        } else {
+            sm($chatID, $text, $inline_menu);
+        }
+        
+        temp(); // Clear any previous state
+    }
+    
+    // Handler for info page
+    elseif ($msg == '/support_info') {
+    
+        $text = "My bot information...";
+        $inline_menu = [];
+        $inline_menu[] = [
+            ['text' => "Back to Support", 'callback_data' => '/support']
+        ];
+        
+        if (isset($cbmid)) {
+            cb_reply($text, $inline_menu);        
+        } else {
+            // We use sm() instead of smg() since this is a secondary message
+            // and buttons don't lead to any input
+            sm($chatID, $text, $inline_menu);
+        }
+    }
+
+    // Add more handlers for /support_contact, /support_rules, etc...
+}
+```
+
+**Benefits of this structure:**
+
+This approach will help you keep your code organized and easy to maintain, especially as the bot grows in complexity.
+
+Using clear sectioning helps you:
+- Avoid conflicts between commands
+- Reduce deeply nested if-else statements
+- Make the code more readable and maintainable
+- Easily find and modify specific features
+- Handle complex navigation flows with clarity
+
 ## 🔒 Security Features
 
 ### IP Verification
@@ -569,7 +758,7 @@ if ($msg == "/special_action") {
 
 ### Input Sanitization
 
-User input is automatically sanitized to avoid XSS attacks, always remember to use secure( function to call database with user parameters. Never put them in query directly:
+User input is automatically sanitized to avoid XSS attacks. Always remember to use the `secure()` function to call the database with user parameters. Never put them in the query directly:
 
 ```php
 $msg = strip_tags($update["message"]["text"]);
@@ -577,15 +766,17 @@ $nome = strip_tags($update["message"]["from"]["first_name"]);
 ```
 
 ### Blocked Users
+
 A simple blocked users system is included.
 Just add the user to the `blocked_users` table and the framework will automatically block any interaction from that user.
+
 ```php
 // Block a user
 secure("INSERT INTO blocked_users (user_id, by_user_id) VALUES (:uid, :aid)", [
     'uid' => $blocked_user_id,
     'aid' => $admin_id
 ]);
-// the framework will automatically block any interaction from that user, can check out in comandi.php
+// The framework will automatically block any interaction from that user, you can check it out in comandi.php
 ```
 
 
