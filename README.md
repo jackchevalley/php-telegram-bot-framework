@@ -834,7 +834,8 @@ This framework is designed to be customized for your specific needs. Feel free t
 
 ## 📄 License
 
-This framework is provided as-is for building Telegram bots.
+This framework is provided as is for building Telegram bots.
+You are free to use and modify it for both personal and commercial projects.
 
 ## 💬 Support
 
@@ -844,7 +845,11 @@ For issues or questions about the framework structure, check:
 - Guzzle HTTP Client: https://docs.guzzlephp.org/
 - My Development channel: https://t.me/JacksWork
 
+I hope this will help you create amazing bots or even starting your own coding journey.
+I’ll always be grateful to the open-source framework that helped me when I began programming many years ago. 
+Today, I enjoy my work thanks to that code and the people who shared it.
+
 ---
 
-**Built with ❤️ by [@JackChevalley](https://t.me/JacksWork)**
+**Built with ❤️ by [@JackChevalley ☭](https://t.me/JacksWork)**
 
