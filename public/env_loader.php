@@ -13,15 +13,15 @@ function load_env(): void {
     global $env_loaded;
     if ($env_loaded) return;
 
-    $file_path = __DIR__ . '/../data/.env';
+    $file_directory = __DIR__ . '/../data/';
     if (!file_exists($file_path)) {
         die("Environment file .env not found at $file_path");
     }
 
-    $file_path = realpath($file_path);
-    echo "Loading environment from: $file_path\n";
+    $file_directory = realpath($file_directory);
+    echo "Loading environment from: $file_directory\n";
 
-    $dotenv = Dotenv::createImmutable($file_path);
+    $dotenv = Dotenv::createImmutable($file_directory);
     $dotenv->load();
 
     $env_loaded = true;
