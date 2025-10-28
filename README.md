@@ -50,7 +50,9 @@ composer install
 Copy the example environment file and edit it:
 
 ```bash
+cd ../../
 cp data/.env.example data/.env
+rm data/.env.example
 ```
 
 **Remember to edit** `data/.env` with your configuration.
