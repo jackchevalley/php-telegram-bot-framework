@@ -1,0 +1,76 @@
+<?php
+const MAINSTART = true;
+date_default_timezone_set('Europe/Rome');
+
+
+$content = file_get_contents("php://input");
+$update = json_decode($content, true);
+
+//Chiudo connessione con telegram
+if(isset($_SERVER['REMOTE_ADDR'])) {
+	$ip = $_SERVER['REMOTE_ADDR'];
+	require_once 'public/access.php';	// Verifica che la richiesta web arrivi da telegram stesso
+
+	set_time_limit(300);
+	ignore_user_abort(true);
+
+	$out = json_encode([
+		'ok' => True,
+		'text' => "Bot developed by <a href='https://t.me/JacksWork'>@JackChevalley</a>"
+	]);
+
+	header('Connection: close');
+	header("Content-type:application/json");
+
+	echo $out;
+	flush();
+
+	// Termina la richiesta di telegram prima di processare di modo da velocizzare il processo
+	if (function_exists('fastcgi_finish_request')) {
+		fastcgi_finish_request();
+	}
+}
+
+
+// Crea la connessione con la lib delle richieste
+require_once 'public/libs/vendor/autoload.php';
+use GuzzleHttp\Client;
+
+
+// Crea il client delle richieste
+$api = $_GET["api"] ?? die('NO_API_PROVIDED');
+$client = new Client([
+	'base_uri' => 'https://api.telegram.org/'. $api .'/',
+	'timeout'  => 0
+]);
+unset($api);    // unset for security, we don't need it anymore since is already in base_uri
+
+
+// Crea le funzioni e le variabili
+require_once 'public/functions.php';
+//require_once 'public/redis_functions.php';
+
+
+// Controlli di sicurezza
+if (!(isset($userID) and is_numeric($userID) and $userID > 0)) exit();
+if (!(isset($chatID) and is_numeric($chatID))) exit();
+
+
+// Sezione principale dei comandi
+require_once 'public/database.php';
+
+try {
+    // Handle payments callback
+    if (isset($update['pre_checkout_query'])) {
+        require_once 'public/payments/payments_callback.php';
+    }
+
+    // Handle anything else
+    else {
+        require_once 'comandi.php';
+    }
+
+} finally {
+    closeDbConnection();
+//    closeRedisConnection();
+}

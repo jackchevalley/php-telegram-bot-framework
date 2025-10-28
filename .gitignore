@@ -1,0 +1,37 @@
+# IDEs
+.idea
+.vscode
+
+# IDE anywhere
+**/.idea/
+**/.vscode/
+**/*.sublime-workspace
+**/*.sublime-project
+
+# Logs
+**/*.log
+
+# Editor swap/backup
+**/*.swp
+**/*.swo
+**/*~
+**/*.bak
+
+# Cache
+**/cache/
+**/*.cache
+**/__pycache__/
+**/.cache/
+
+# Env files
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Local databases
+**/*.sqlite
+**/*.sqlite3
+
+# Composer vendor directory
+/public/libs/vendor/
+/public/payments/
