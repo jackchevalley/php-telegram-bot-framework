@@ -34,6 +34,8 @@ I've been using and improving it for years and almost every bot I create is base
 
 ```bash
 git clone https://github.com/jackchevalley/php-telegram-bot-framework.git
+mv php-telegram-bot-framework my-project-name
+cd my-project-name
 ```
 
 ### 2. Install Dependencies
