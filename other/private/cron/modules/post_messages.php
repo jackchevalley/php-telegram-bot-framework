@@ -143,7 +143,7 @@ foreach ($user_chunks as $chunk_index => $chunk) {
                         secure('UPDATE users SET attivo = 0 WHERE user_id = '. $user['user_id']);
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $errors++;
                 $error_msg = $e->getMessage();
                 if (!in_array($error_msg, $errors_list)) {
