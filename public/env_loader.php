@@ -19,8 +19,6 @@ function load_env(): void {
     }
 
     $file_directory = realpath($file_directory);
-    echo "Loading environment from: $file_directory\n";
-
     $dotenv = Dotenv::createImmutable($file_directory);
     $dotenv->load();
 
