@@ -14,8 +14,8 @@ function load_env(): void {
     if ($env_loaded) return;
 
     $file_directory = __DIR__ . '/../data/';
-    if (!file_exists($file_path)) {
-        die("Environment file .env not found at $file_path");
+    if (!file_exists($file_directory)) {
+        die("Environment file .env not found at $file_directory");
     }
 
     $file_directory = realpath($file_directory);
