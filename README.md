@@ -99,8 +99,7 @@ Copy the example environment file and edit it:
 
 ```bash
 cd ../../
-cp data/.env.example data/.env
-rm data/.env.example
+cp extra/.env.example data/.env
 nano data/.env
 ```
 
@@ -147,7 +146,7 @@ CREATE DATABASE your_database CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 Import the database structure:
 
 ```bash
-mysql -u your_user -p your_database < data/basic_database_structure.sql
+mysql -u your_user -p your_database < extra/basic_database_structure.sql
 ```
 
 The framework includes two tables:
@@ -167,7 +166,18 @@ This script will:
 2. Clear pending updates
 3. Set new webhook with your URL
 
-### 7. Test Your Bot
+### 7. Remove unwanted files
+
+Clean up unused files for security and organization.
+The `extra/` folder contains only files that are not needed at this point and should be entirely removed from your project.
+
+```bash
+rm -rf extra/
+```
+
+To keep everything clean, you can also remove this README file if you want.
+
+### 8. Test Your Bot
 
 Send `/start` to your bot on Telegram. You should receive a welcome message!
 
@@ -204,6 +214,7 @@ Send `/start` to your bot on Telegram. You should receive a welcome message!
 I structure the bot files this way:
 - `index.php`: Main entry point for webhook updates
 - `comandi.php`: Main command and input handler
+- `extra/`: Folder with extra files from the repository, <u>should be deleted</u> after setup
 - `data/`: Folder to store/write files, such as language files, configurations, etc.
 - `public/`: Core bot files and configurations, includes all necessary functions that could be used anywhere
 - `other/`: Additional code logic, not functions
