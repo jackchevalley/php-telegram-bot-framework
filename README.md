@@ -12,9 +12,12 @@ I've been using and improving it for years, and almost every bot I create is bas
 - ✨ [Features](#-features)
 - 📋 [Requirements](#-requirements)
 - 🚀 [Quick Start](#-quick-start)
-  - [Configure Environment](#3-configure-environment)
-  - [Configure Bot Settings](#4-configure-bot-settings)
-  - [Set Webhook](#6-set-webhook)
+
+[//]: # (  - [Configure Environment]&#40;#3-configure-environment&#41;)
+
+[//]: # (  - [Configure Bot Settings]&#40;#4-configure-bot-settings&#41;)
+
+[//]: # (  - [Set Webhook]&#40;#6-set-webhook&#41;)
 - 📁 [Project Structure](#-project-structure)
 - 🎯 [Core Concepts](#-core-concepts)
   - [Message Flow](#message-flow)
