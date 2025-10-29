@@ -1,6 +1,6 @@
 # 🤖 Telegram Bot PHP Framework
 
-A lightweight, modular PHP framework for building Telegram bots with webhook support. 
+A lightweight, modular PHP framework for building Telegram bots with webhook support.
 Designed for rapid development with built-in features and resource management.
 
 The framework can be easily customized to fit your bot's specific needs.
@@ -73,6 +73,7 @@ cd my-project-name
 ```bash
 cd public/libs
 composer install
+cd ../../  # Return to project root
 ```
 
 ### 3. Configure Environment
@@ -80,7 +81,6 @@ composer install
 Copy the example environment file and edit it:
 
 ```bash
-cd ../../
 cp extra/.env.example data/.env
 nano data/.env
 ```
@@ -125,7 +125,7 @@ Create a new database if not existing:
 CREATE DATABASE your_database CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 ```
 
-Import the database structure:
+Import the database structure (the file is located in the `extra/` folder):
 
 ```bash
 mysql -u your_user -p your_database < extra/basic_database_structure.sql
@@ -173,9 +173,13 @@ Send `/start` to your bot on Telegram. You should receive a welcome message!
 ├── comandi.php              # Command handlers and routing
 ├── delupdates.php           # Webhook setup script
 ├── data/
-│   ├── .env                 # Environment configuration
-│   ├── .env.example         # Example environment file
-│   └── basic_database_structure.sql  # Database schema
+│   └── posts/               # Example data storage folder
+├── extra/
+│   ├── .env.example         # Example environment file (copy to data/.env)
+│   ├── basic_database_structure.sql  # Database schema
+│   ├── linux/               # Linux setup guides
+│   ├── nginx/               # Nginx configuration files
+│   └── php-fpm/             # PHP-FPM optimization guide
 ├── public/
 │   ├── access.php           # IP verification (Telegram servers)
 │   ├── configs.php          # Bot configuration
@@ -195,22 +199,29 @@ Send `/start` to your bot on Telegram. You should receive a welcome message!
 │       ├── channels.php     # Channel message handlers
 │       └── groups.php       # Group message handlers
 ```
-I structure the bot files this way:
+
+**File Structure Explanation:**
+
 - `index.php`: Main entry point for webhook updates
 - `comandi.php`: Main command and input handler
-- `extra/`: Folder with extra files from the repository, <u>should be deleted</u> after setup
-- `data/`: Folder to store/write files, such as language files, configurations, etc.
+- `delupdates.php`: Webhook setup utility script
+- `data/`: Folder to store/write files, such as `.env`, language files, user data, etc.
+- `extra/`: Folder with setup guides and example files from the repository, <u>should be deleted</u> after setup
 - `public/`: Core bot files and configurations, includes all necessary functions that could be used anywhere
 - `other/`: Additional code logic, not functions
 - `other/sections/`: Handlers for specific messages such as admin commands, groups/channels messages, and more
 - `other/private/`: Private code that should not be accessible from outside, such as cron jobs or any other background tasks
 
-In order to keep it functional as it should be, make sure to set permissions like this to the folders:
+In order to keep it functional as it should be, make sure to set proper permissions:
 ```bash
-chmod -R 766 data/
-chmod -R 600 other/private/
+# Allow web server to write in data folder
+sudo chown -R www-data:www-data data/
+chmod -R 755 data/
+
+# Protect private folder from web access
+chmod -R 700 other/private/
 ```
-This will allow the bot to write files in the data folder and keep private files safe from outside access.
+This will allow the bot to write files in the data folder while keeping private files safe from outside access.
 
 ---
 
@@ -319,7 +330,7 @@ smg($chatID, "Updated message", $inline_menu);
 This can be very useful to keep the chat clean when navigating menus or updating information.
 I suggest imagining the bot structure like this:
 - **Main section messages**: Use `smg()` to always have only one message per section. This prevents users from clicking old buttons, going back and forth, and potentially creating conflicts, for example with input requests.
-- **Subsection messages**: Use normal `sm()` messages to provide additional information without deleting the main section message. 
+- **Subsection messages**: Use normal `sm()` messages to provide additional information without deleting the main section message.
 
 ### Available Message Functions
 
@@ -339,7 +350,7 @@ You don't need to perform manual connection or prepare statements; just call the
 
 ```php
 // Execute query without results
-secure("UPDATE users SET first_name = :name, username = :username WHERE user_id = :id", [
+secure("UPDATE users SET first_name = :first_name, username = :username WHERE user_id = :id", [
     'first_name' => $name,
     'username' => $username ?? null,        // maybe the user does not have a username
     'id' => $userID
@@ -371,7 +382,7 @@ echo json_encode($user);
 
 // Fetch all rows
 $users = secure("SELECT * FROM users WHERE attivo = 1", 
-    0, 
+    [], 
     3  // Fetch mode: 3 = all rows
 );
 echo json_encode($users);
@@ -463,8 +474,8 @@ Edit `other/sections/admin_commands.php`:
 
 ```php
 if ($msg == '/admin_stats') {
-    $total_users = secure("SELECT COUNT(*) as cnt FROM users", 0, 1)['cnt'];
-    $active_users = secure("SELECT COUNT(*) as cnt FROM users WHERE attivo = 1", 0, 1)['cnt'];
+    $total_users = secure("SELECT COUNT(*) as cnt FROM users", [], 1)['cnt'];
+    $active_users = secure("SELECT COUNT(*) as cnt FROM users WHERE attivo = 1", [], 1)['cnt'];
     
     $text = [
         "📊 <b>Bot Statistics</b>",
@@ -501,9 +512,9 @@ The limits for warnings and critical alerts should be edited by you according to
 ## 🎨 Commands and Input Handling
 
 The framework, after initializing variables, routes all commands and messages to `comandi.php`.
-Here it will populate some more variables used only in the commands handling *(the `if(true)` is just to collapse the code in IDEs)*. 
+Here it will populate some more variables used only in the commands handling *(the `if(true)` is just to collapse the code in IDEs)*.
 
-The code structure splits between messages and media, since messages could be commands but media cannot. 
+The code structure splits between messages and media, since messages could be commands but media cannot.
 
 After splitting messages and media, it splits again between commands (starting with `/`) and potential inputs.
 
@@ -603,7 +614,7 @@ Imagine your bot having this structure:
     - Contact
     - Rules
 
-I suggest structuring your code in sections for better organization and splitting commands from inputs. 
+I suggest structuring your code in sections for better organization and splitting commands from inputs.
 
 Inside the commands section you can have something like this:
 ```php
@@ -819,7 +830,7 @@ Create a file in `other/private/cron/modules/`:
 if(!defined('MAINSTART')) { die("<b>The request source has not been recognized. Make sure to execute from the provided entry point</b>"); }
 
 // Your task logic here
-$users = secure("SELECT * FROM users WHERE attivo = 1", 0, 3);
+$users = secure("SELECT * FROM users WHERE attivo = 1", [], 3);
 
 foreach ($users as $user) {
     sm($user['user_id'], "Daily report: ...");
@@ -864,14 +875,14 @@ Every internal file includes a check like this:
 if(!defined('MAINSTART')) { die("<b>The request source has not been recognized. Make sure to execute from the provided entry point</b>"); }
 ```
 
-If the constant isn’t defined, it means the file was accessed directly rather than through an authorized entry point. 
+If the constant isn’t defined, it means the file was accessed directly rather than through an authorized entry point.
 The script will immediately stop and display an error message.
 
 Because your project may have multiple entry points (for example, for cron jobs or other API endpoints),
 you must always define this constant at the very top of each of them.
 Otherwise, internal includes will fail due to the missing definition.
 
-Finally, remember to include the same initial check in every new internal file you create. 
+Finally, remember to include the same initial check in every new internal file you create.
 This ensures that no one can access it directly from outside the provided entry points.
 
 
@@ -951,7 +962,7 @@ I use to run my bots on Ubuntu servers. This framework is very light, you don't 
 
 **Check out the complete guide:** [setup-ubuntu25](extra/linux/setup-ubuntu25.md)
 
-This will helpn you set up a basic Ubuntu server with all the necessary components to run your bot smoothly.
+This will help you set up a basic Ubuntu server with all the necessary components to run your bot smoothly.
 
 ### 🚀 Nginx Configuration
 I suggest using Nginx as a web server for better performance with PHP-FPM.
@@ -993,7 +1004,7 @@ For issues or questions about the framework structure, check:
 - My Development channel: https://t.me/JacksWork
 
 I hope this will help you create amazing bots or even start your own coding journey.
-I'll always be grateful to the open-source framework that helped me when I began programming many years ago. 
+I'll always be grateful to the open-source framework that helped me when I began programming many years ago.
 Today, I enjoy my work thanks to that code and the people who shared it.
 
 ---

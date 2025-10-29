@@ -158,7 +158,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
 -- Exit
-EXIT;
+EXIT();
 ```
 
 ---
@@ -275,14 +275,24 @@ http {
 ```bash
 # Remove default Nginx welcome page
 sudo rm /etc/nginx/sites-available/default
-
-# Create new default config
-sudo nano /etc/nginx/sites-available/default.conf
 ```
 
-**Paste the configuration you find at:** 
-- [Default conf](../nginx/sample-default.conf) -  `extra/nginx/sample-default.conf`
-- [Bot Webhook](../nginx/sample-default.conf) -  `extra/nginx/bot-webhook.conf`
+Now you need to create two configuration files:
+
+1. **Default blocking server** - Copy the content from [sample-default.conf](../nginx/sample-default.conf) (`extra/nginx/sample-default.conf`)
+2. **Bot webhook configuration** - Copy the content from [bot-webhook.conf](../nginx/bot-webhook.conf) (`extra/nginx/bot-webhook.conf`)
+
+```bash
+# Create default blocking server config
+sudo nano /etc/nginx/sites-available/default.conf
+# Paste the content from sample-default.conf
+
+# Create bot webhook config (edit the domain name inside)
+sudo nano /etc/nginx/sites-available/bot-webhook.conf
+# Paste the content from bot-webhook.conf and edit your domain
+```
+
+> **Important:** Remember to edit `bot-webhook.conf` with your actual domain name before enabling it.
 
 ### Step 3: Enable Configuration
 

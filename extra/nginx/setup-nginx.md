@@ -142,7 +142,7 @@ sudo nano /etc/nginx/sites-available/bot.yourdomain.com.conf
    # Find your PHP socket
    ls /run/php/
    ```
-   
+
    Update if needed:
    ```nginx
    fastcgi_pass unix:/run/php/php8.4-fpm.sock;
@@ -236,7 +236,17 @@ server {
 
 ## SSL/HTTPS Setup
 
-Telegram requires HTTPS for webhooks. The configurations provided are ready for SSL from Cloudflare with certificate between Client and Cloudflare.
+Telegram requires HTTPS for webhooks.
+
+### Using Cloudflare (Recommended)
+
+The configurations provided are ready for SSL from Cloudflare with "Flexible" or "Full" SSL mode:
+- **Flexible**: Cloudflare handles SSL between client and Cloudflare (HTTP between Cloudflare and your server)
+- **Full**: SSL between client and Cloudflare, and between Cloudflare and your server. You will need to handle certificate in this scenario
+
+Simply point your domain to Cloudflare, enable SSL/TLS, and the bot webhook will work with HTTPS automatically.
+
+
 
 ---
 

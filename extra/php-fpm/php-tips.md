@@ -42,7 +42,7 @@ sudo add-apt-repository -y ppa:ondrej/php
 sudo apt update
 
 # Install PHP 8.4 with common extensions
-sudo apt -y install php8.4-fpm php8.4-cli php8.4-mysql php8.4-curl php8.4-mbstring php8.4-xml php8.4-gmp php8.4-bcmath php8.4-zip php8.4-intl sudo apt install php8.4-json
+sudo apt -y install php8.4-fpm php8.4-cli php8.4-mysql php8.4-curl php8.4-mbstring php8.4-xml php8.4-gmp php8.4-bcmath php8.4-zip php8.4-intl php8.4-json
 
 # Start and enable PHP-FPM
 sudo systemctl start php8.4-fpm && sudo systemctl enable php8.4-fpm
