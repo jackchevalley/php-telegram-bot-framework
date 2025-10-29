@@ -145,6 +145,21 @@ Send `/start` to your bot on Telegram. You should receive a welcome message!
 │       ├── channels.php     # Channel message handlers
 │       └── groups.php       # Group message handlers
 ```
+I use to structure the bot files this way:
+- `index.php`: Main entry point for webhook updates
+- `comandi.php`: Main command and input handler
+- `data/`: Folder to store/write files, such as language files, configurations ecc.. 
+- `public/`: Core bot files and configurations, includes all necessary functions that could be used anywhere
+- `other/`: Additional code login, not functions
+- `other/sections/`: Handlers for specific messages such as admin commands, groups/channels messages and more.
+- `other/private/`: Private code that should not be accessibile from outside, such as cron jobs or any other background tasks
+
+In order to keep it functional as it should be, make sure to set permissions like this to the folders:
+```bash
+chmod -R 766 data/
+chmod -R 600 other/private/
+```
+This will allow the bot to write files in the data folder and keep private files safe from outside access.
 
 ## 🎯 Core Concepts
 
@@ -153,29 +168,31 @@ Send `/start` to your bot on Telegram. You should receive a welcome message!
 1. **Webhook receives update** → `index.php`
 2. **IP verification** → `public/access.php`
 3. **Fast response to Telegram** → Connection closed immediately
-4. **Parse update data** → Extract message, user info, etc.
-5. **Route to handler** → `comandi.php`
-6. **Process command** → Execute bot logic or redirect to sections
-7. **Send response** → Prepare and send message back to user
+4. **Parse update data** → Extract message, user info, etc. (`public/functions.php`)
+5. **Load classes and connectors** → Environment, Database, HTTP client, Redis (if used)
+6. **Route to handler** → `comandi.php`
+7. **Process command** → Execute bot logic or redirect to sections
+8. **Send response** → Prepare and send message back to user
+9. **Close connectors** → Clean up database and HTTP connections
 
 ### Update Variables
 
-The framework automatically extracts these variables from Telegram updates:
+The framework automatically extracts some variables from Telegram updates, you can find all of them in `public/functions.php`:
 
 ```php
 $update      // Raw update array
 $chatID      // Chat ID
 $userID      // User ID
 $name        // User's first name
-$username    // User's username (if available)
+$username    // User's username (if available, unset if not)
 $msg         // Message text or callback data
+$message_id  // Message ID (unset if it is a callback, you'll find it in $cbmid)
 $cbid        // Callback query ID
 $cbmid       // Callback message ID
-$message_id  // Message ID
+$caption     // Media caption (unset if not present or not a media)
 $photo       // Photo file_id
 $video       // Video file_id
 $voice       // Voice file_id
-$caption     // Media caption
 // ... and more
 ```
 
@@ -760,14 +777,42 @@ Using clear sectioning helps you:
 // Blocks requests not from Telegram's IP ranges
 ```
 
+### Strict Entry Point
+
+At the very beginning of `index.php`, you’ll find this constant definition:
+
+```php
+const MAINSTART = true;
+```
+
+This constant acts as a security flag. <br>
+Every internal file includes a check like this:
+
+```php
+if(!defined('MAINSTART')) { die("<b>The request source has not been recognized. Make sure to execute from the provided entry point</b>"); }
+```
+
+If the constant isn’t defined, it means the file was accessed directly rather than through an authorized entry point. 
+The script will immediately stop and display an error message.
+
+Because your project may have multiple entry points (for example, for cron jobs or other API endpoints),
+you must always define this constant at the very top of each of them.
+Otherwise, internal includes will fail due to the missing definition.
+
+Finally, remember to include the same initial check in every new internal file you create. 
+This ensures that no one can access it directly from outside the provided entry points.
+
+
 ### Input Sanitization
 
-User input is automatically sanitized to avoid XSS attacks. Always remember to use the `secure()` function to call the database with user parameters. Never put them in the query directly:
+User input is automatically sanitized to avoid HTML tags issues while displaying messages or names.
 
 ```php
 $msg = strip_tags($update["message"]["text"]);
 $name = strip_tags($update["message"]["from"]["first_name"]);
 ```
+
+Always remember to use the `secure()` function to call the database with user parameters. <u>Never</u> put them in the query directly.
 
 ### Blocked Users
 
@@ -813,7 +858,7 @@ if (!isset($userID)) {
 
 ### Error Reporting
 
-Errors are automatically sent to the main admin when testing out:
+Errors are automatically sent to the main admin when testing out.
 
 You can add error reporting in the index.php to store logs in a selected file.
 
