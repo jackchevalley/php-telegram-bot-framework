@@ -19,9 +19,9 @@ I've been using and improving it for years, and almost every bot I create is bas
 - 🎨 [Commands and Input Handling](#-commands-and-input-handling)
 - ⏰ [Cron Jobs](#-cron-jobs)
 - 🔒 [Security Features](#-security-features)
-- 📱 [Handling Different Message Types](#-handling-different-message-types)
+- 📱 [Handling Different Message Sources](#-handling-different-message-sources)
 - 📝 [Best Practices](#-best-practices)
-- 💡 [Extra tips and Setup guides](#-extra-tips)
+- 💡 [Extra tips and Linux Setup Guides](#-extra-tips)
 - 🤝 [Contributing](#-contributing)
 - 📄 [License](#-license)
 - 💬 [Support](#-support)
@@ -903,7 +903,7 @@ secure("INSERT INTO blocked_users (user_id, by_user_id) VALUES (:uid, :aid)", [
 ---
 
 
-## 📱 Handling Different Message Types
+## 📱 Handling Different Message Sources
 
 ### Group Messages
 
