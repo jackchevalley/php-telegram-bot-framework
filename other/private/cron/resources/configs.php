@@ -14,7 +14,6 @@ error_reporting(E_ALL & ~E_DEPRECATED);
 require_once __DIR__ . '/../../../../public/configs.php';
 require_once __DIR__ .'/../../../../public/env_loader.php';
 
-load_env();
 if (!isset($_ENV['TELEGRAM_BOT_TOKEN'])) {
     die('API key not found in environment variables when loading payments_callback.php');
 }

@@ -166,7 +166,7 @@ The framework automatically extracts these variables from Telegram updates:
 $update      // Raw update array
 $chatID      // Chat ID
 $userID      // User ID
-$nome        // User's first name
+$name        // User's first name
 $username    // User's username (if available)
 $msg         // Message text or callback data
 $cbid        // Callback query ID
@@ -266,7 +266,7 @@ You don't need to perform manual connection or prepare statements, just call the
 ```php
 // Execute query without results
 secure("UPDATE users SET first_name = :name, username = :username WHERE user_id = :id", [
-    'first_name' => $nome,
+    'first_name' => $name,
     'username' => $username ?? null,        // maybe the user does not have a username
     'id' => $userID
 ]);
@@ -309,7 +309,7 @@ echo json_encode($users);
 
 // Get last insert ID
 $last_row_ID = secure("INSERT INTO users (user_id, first_name) VALUES (:id, :name)", 
-    ['id' => $userID, 'name' => $nome], 
+    ['id' => $userID, 'name' => $name], 
     4  // Fetch mode: 4 = last insert ID
 );
 echo "New user ID: " . $last_row_ID;
@@ -496,7 +496,7 @@ If you are using a Reply Keyboard, you can map buttons to commands using the `$C
 
 if ($msg == "/start") {
     $text = []
-    $text[] = "<b>Welcome <a href='tg://user?id=$userID'>$nome</a>!</b>";
+    $text[] = "<b>Welcome <a href='tg://user?id=$userID'>$name</a>!</b>";
     $text[] = "";
     $text[] = "This is a sample bot built with the Telegram Bot PHP Framework.";
     
@@ -592,7 +592,7 @@ Inside the commands section you can have something like this:
 if ($msg == '/start') {
     
     $text = [];
-    $text[] = "<b>Welcome <a href='tg://user?id=$userID'>$nome</a>!</b>";
+    $text[] = "<b>Welcome <a href='tg://user?id=$userID'>$name</a>!</b>";
     $text[] = "";
     $text[] = "This is the main menu. Choose an option:";
     
@@ -766,7 +766,7 @@ User input is automatically sanitized to avoid XSS attacks. Always remember to u
 
 ```php
 $msg = strip_tags($update["message"]["text"]);
-$nome = strip_tags($update["message"]["from"]["first_name"]);
+$name = strip_tags($update["message"]["from"]["first_name"]);
 ```
 
 ### Blocked Users

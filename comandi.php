@@ -27,14 +27,14 @@ if (true) {
     $adm = $is_admin ? $userID : $MAIN_ADMIN;
 
 
-    // Useful for use in texts and buttons, emp is the invisible character
-    $bin = "🗑";
-    $emp = "ㅤ";
+    // Useful for use in texts and buttons, $empty_char is the invisible character
+    $trash_icon = "🗑";
+    $empty_char = "ㅤ";
     $bc = "Back 🔙";
 
 
     // Common buttons and texts
-    $hide_button_row = [['text' => $bin, 'callback_data' => '/del_2']];
+    $hide_button_row = [['text' => $trash_icon, 'callback_data' => '/del_2']];
 
 
 
@@ -57,7 +57,7 @@ if (true) {
 
             secure("INSERT INTO users(user_id, first_name, username) VALUE (:id, :name, :username)", [
                 'id' => $userID,
-                'name' => $nome,
+                'name' => $name,
                 'username' => $username ?? null
             ]);
 
@@ -68,14 +68,14 @@ if (true) {
 
         // Update user data
         $new_username = $username ?? null;
-        if ($us['first_name'] != $nome || $us['username'] != $new_username || !$us['active']) {
+        if ($us['first_name'] != $name || $us['username'] != $new_username || !$us['active']) {
 
             $query_params = [];
             $query_args = [];
-            if ($us['first_name'] != $nome) {
+            if ($us['first_name'] != $name) {
                 $query_params[] .= "first_name = :n";
-                $query_args['n'] = $nome;
-                $us['first_name'] = $nome;
+                $query_args['n'] = $name;
+                $us['first_name'] = $name;
             }
             if ($us['username'] != $new_username) {
                 $query_params[] .= "username = :u";
@@ -103,7 +103,7 @@ if (true) {
 
 
         // User tag for generic use
-        $user_tag = getUserTag($userID, $nome, $username ?? '');
+        $user_tag = getUserTag($userID, $name, $username ?? '');
 
 
         // BLOCKED USERS
@@ -151,7 +151,7 @@ if (isset($msg)) {
         if ($msg == "/start") {
 
             $text = [];
-            $text[] = "<b>Welcome <a href='tg://user?id=$userID'>$nome</a>!</b>";
+            $text[] = "<b>Welcome <a href='tg://user?id=$userID'>$name</a>!</b>";
             $text[] = "";
             $text[] = "The bot is working...";
             $text[] = date("Y-m-d H:i:s");
@@ -200,20 +200,20 @@ if (isset($msg)) {
         }
 
 
-        // Comando non riconosciuto
+        // Command not recognized
         else {
-            error("0. Comando non riconosciuto.");
+            error("0. Command not recognized.");
         }
     }
 
 
-    // SEZIONE DEGLI INPUT di testo (Non comandi)
+    // TEXT INPUT SECTION (Non-commands)
     elseif ($us['temp']) {
         $temp = $us['temp'];
 
 
 
-        // Sezione Amministratori
+        // Administrator Section
         if ($is_admin) {
 
             require_once 'other/sections/admin_commands.php';
@@ -224,16 +224,16 @@ if (isset($msg)) {
     }
 
 
-    // Messaggio generico non riconosciuto
+    // Generic unrecognized message
     else {
-        error("1. Comando non riconosciuto.");
+        error("1. Command not recognized.");
     }
 }
 
-// Gestione dei media (CHAT e ADMIN)
+// MEDIA HANDLING (CHAT and ADMIN)
 else {
 
-    // Ricezione dei media input per gli admin
+    // Receiving media input for admins
     if ($is_admin and $us['temp']) {
 
         require_once 'other/sections/admin_commands.php';
@@ -241,9 +241,9 @@ else {
     }
 
 
-    // Messaggio generico non riconosciuto
+    // Generic unrecognized message
     else {
-        error("2. Comando non riconosciuto.");
+        error("2. Command not recognized.");
     }
 }
 

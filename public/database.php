@@ -3,7 +3,7 @@ if(!defined('MAINSTART')) { die(); }
 
 // Get the configurations for the bot
 require_once 'env_loader.php';
-load_env();
+
 
 // Define if database is enabled
 define(
@@ -61,7 +61,7 @@ function secure ($sql, $par = 0, $fc = 0): array | int | null {
         if (function_exists("sm") && isset($GLOBALS['admin_errors_ID'])) {
             sm(
                 $GLOBALS['admin_errors_ID'],
-                "Query error encountered\n\n" . $e->getMessage() . "\n\n<b>Qry:</b> \n<code>" . $sql . "</code>"
+                "Query error encountered\n\n" . $e->getMessage() . "\n\n<b>Query:</b> \n<code>" . $sql . "</code>"
             );
         }
 
@@ -139,7 +139,7 @@ function transaction_rollback(): void {
 }
 
 
-// Chiudi la connessione al database
+// Close the database connection
 function closeDbConnection(): void {
     if (isset($GLOBALS['db']) and $GLOBALS['db']) {
         $GLOBALS['db'] = null;

@@ -3,7 +3,6 @@ if (!defined('MAINSTART')) { die(); }
 
 // Load environment variables
 require_once "env_loader.php";
-load_env();
 
 $REDIS_BASE_KEY = $_ENV['REDIS_BASE_KEY'] ?? 'project_base_key';
 

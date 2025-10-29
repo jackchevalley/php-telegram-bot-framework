@@ -24,3 +24,6 @@ function load_env(): void {
 
     $env_loaded = true;
 }
+
+
+load_env();

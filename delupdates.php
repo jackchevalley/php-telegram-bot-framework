@@ -1,11 +1,15 @@
 <?php
+if (php_sapi_name() !== 'cli') {
+    die("This script can only be run from the command line.". PHP_EOL);
+}
+
+
 const MAINSTART = true;
 echo "Starting process". PHP_EOL;
 
 
 // Get the configurations for the bot
 require_once 'public/env_loader.php';
-load_env();
 
 
 // Bot token
@@ -24,7 +28,6 @@ $webhook = $_ENV['WEBHOOK_URL'] ."?api=" . $api;
 
 
 // EXECUTE OPERATIONS
-
 echo "Deleting webhook... ";
 file_get_contents("https://api.telegram.org/$api/deleteWebhook");
 echo "OK". PHP_EOL;

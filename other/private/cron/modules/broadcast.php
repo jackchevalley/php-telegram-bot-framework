@@ -218,7 +218,7 @@ if ($post_info['cbm_id']) {
     $cb_text = [];
     $cb_text[] = "⚙️ <b>Sending completed!</b> ";
     $cb_text[] = "";
-    $cb_text[] = "📤 Sent to <b>". count($users) ."</b> utenti su <b>". count($users) ."</b> (<b>". $percent ."%</b>)";
+    $cb_text[] = "📤 Sent to <b>". count($users) ."</b> users out of <b>". count($users) ."</b> (<b>". $percent ."%</b>)";
     $cb_text[] = "✅ Successes: <b>". $success ."</b> (<b>". $success_percent ."%</b>)";
     $cb_text[] = "❌ Errors: <b>". $errors ."</b>";
 

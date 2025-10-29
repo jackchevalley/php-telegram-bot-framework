@@ -8,15 +8,14 @@ if (!defined('MAINSTART')) { die(); }
 ###############################################################################################
 # GLOBAL CONSTANTS AND VARIABLES
 
-// Configurations and variables
+// Configurations and variables, we include them again to be sure they are available
 require_once 'configs.php';
 require_once 'env_loader.php';
-load_env();
 
 $admin_errors_ID = $MAIN_ADMIN;
 
 
-//CREAZIONE VARIABILI DA UPDATE
+// CREATE VARIABLES FROM THE UPDATE
 if(isset($update)) {
     if(isset($update['channel_post']))
         $update['message'] = $update['channel_post'];
@@ -35,7 +34,7 @@ if(isset($update)) {
         $chatID = $update["callback_query"]["message"]["chat"]["id"];
         $userID = $update["callback_query"]["from"]["id"];
 
-        $nome = strip_tags($update["callback_query"]["from"]["first_name"]);
+        $name = strip_tags($update["callback_query"]["from"]["first_name"]);
 
         if(isset($update["callback_query"]["from"]["username"]))
             $username = strip_tags($update["callback_query"]["from"]["username"]);
@@ -49,13 +48,13 @@ if(isset($update)) {
         }
 
         if(isset($update["pre_checkout_query"]["from"]["first_name"]))
-            $nome = strip_tags($update["message"]["from"]["first_name"]);
+            $name = strip_tags($update["message"]["from"]["first_name"]);
 
         if(isset($update["pre_checkout_query"]["from"]["username"]))
             $username = $update["message"]["from"]["username"];
     }
 
-    // Messaggi normali
+    // Normal messages
     else {
 
         if(isset($update["message"]["chat"]["id"]))
@@ -65,7 +64,7 @@ if(isset($update)) {
             $userID = $update["message"]["from"]["id"];
 
         if(isset($update["message"]["from"]["first_name"]))
-            $nome = strip_tags($update["message"]["from"]["first_name"]);
+            $name = strip_tags($update["message"]["from"]["first_name"]);
 
         if(isset($update["message"]["from"]["username"]))
             $username = $update["message"]["from"]["username"];
@@ -76,7 +75,7 @@ if(isset($update)) {
 
 
 
-    // messaggi
+    // messages
     if(isset($update['message']['text'])) {
         $msg = $update["message"]["text"];
     }
@@ -276,7 +275,7 @@ function sm(int $chatID, int|string|array $text, array $menu = [], array $hard_m
     }
     else {
         if($chatID == $GLOBALS['admin_errors_ID'])
-            sm($chatID, "Errore sendMessage: ". $response['description'], parse_mode: '');
+            sm($chatID, "sendMessage error: ". $response['description'], parse_mode: '');
 
         return $response['description'];
     }
@@ -367,7 +366,7 @@ function forwardMessage(int $chatID, int $from_chatID, int $message_id): int|str
     }
     else {
         if($chatID == $GLOBALS['admin_errors_ID'])
-            sm($chatID, "Errore forwardMessage: ". $response['description'], parse_mode: '');
+            sm($chatID, "forwardMessage error: ". $response['description'], parse_mode: '');
 
         return $response['description'];
     }
@@ -540,7 +539,7 @@ function cb_reply(
     if(isset($cbid) and $cbid) {
         $args = ['callback_query_id' => $cbid];
 
-        //Notifica su schermo
+        // Screen notification
         if(isset($ntext) and $ntext) {
             $args['text'] = $ntext;
             $args['show_alert'] = $ntype;
@@ -1029,7 +1028,7 @@ function parse(string $text): string {
 
         if(isset($GLOBALS[$nm])) {
             $val = $GLOBALS[$nm];
-            if (strtolower($nm) == 'api') $val = "SUCA COGLIONE";
+            if (strtolower($nm) == 'api') $val = "HIDDEN_FOR_SECURITY";
             $text = str_replace($var, $val, $text);
         }
     }
@@ -1083,7 +1082,7 @@ function resolve_path_to_url(string $path): string {
  */
 function getUser(int|string $user, bool $from_telegram = false): array|false {
 
-    // Trova userID se non passato
+    // Find userID if not provided
     if (!is_numeric($user)) {
         $userID = resolve_username_to_id($user);
         if (!$userID) return false;
