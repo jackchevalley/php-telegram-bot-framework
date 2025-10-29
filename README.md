@@ -101,6 +101,7 @@ Copy the example environment file and edit it:
 cd ../../
 cp data/.env.example data/.env
 rm data/.env.example
+nano data/.env
 ```
 
 **Remember to edit** `data/.env` with your configuration.
@@ -135,7 +136,13 @@ $ADMIN_CHATS = [
 
 These are the main bot settings that should be easily and quickly accessible, which is why they are not in `data/.env`.
 
-### 5. Setup Database (if you want)
+### 5. Setup Database (optional)
+
+Create a new database if not existing:
+
+```sql
+CREATE DATABASE your_database CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+```
 
 Import the database structure:
 
