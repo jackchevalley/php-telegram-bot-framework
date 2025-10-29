@@ -47,11 +47,13 @@ I've been using and improving it for years, and almost every bot I create is bas
   - [Group Messages](#group-messages)
   - [Channel Posts](#channel-posts)
 - 📝 [Best Practices](#-best-practices)
+- 💡 [Extra tips and Setup guides](#-extra-tips)
 - 🤝 [Contributing](#-contributing)
 - 📄 [License](#-license)
 - 💬 [Support](#-support)
 
 ---
+
 
 ## ✨ Features
 
@@ -69,6 +71,7 @@ I've been using and improving it for years, and almost every bot I create is bas
 
 ---
 
+
 ## 📋 Requirements
 
 - PHP 8.0 or higher (I am currently working with PHP 8.4)
@@ -79,6 +82,7 @@ I've been using and improving it for years, and almost every bot I create is bas
 - You can read the [Linux Setup Guide](extra/linux/setup-ubuntu25.md) for a complete server setup.
 
 ---
+
 
 ## 🚀 Quick Start
 
@@ -187,6 +191,7 @@ Send `/start` to your bot on Telegram. You should receive a welcome message!
 
 ---
 
+
 ## 📁 Project Structure
 
 ```
@@ -234,6 +239,7 @@ chmod -R 600 other/private/
 This will allow the bot to write files in the data folder and keep private files safe from outside access.
 
 ---
+
 
 ## 🎯 Core Concepts
 
@@ -349,6 +355,7 @@ We have included many functions to handle various tasks, but some of them may no
 
 ---
 
+
 ## 💾 Database Usage
 
 ### Secure Query Execution
@@ -460,6 +467,7 @@ temp();
 
 ---
 
+
 ## 👑 Admin Commands
 
 ### Define Admin Section
@@ -514,6 +522,7 @@ The built-in `/status` command shows:
 The limits for warnings and critical alerts should be edited by you according to your server specifications.
 
 ---
+
 
 ## 🎨 Commands and Input Handling
 
@@ -788,6 +797,7 @@ Using clear sectioning helps you:
 
 ---
 
+
 ## ⏰ Cron Jobs
 
 The framework includes a built-in cron system that runs independently.
@@ -853,6 +863,7 @@ For now, it's fairly basic and not implemented in the admin commands, but you ca
 
 ---
 
+
 ## 🔒 Security Features
 
 ### IP Verification
@@ -916,6 +927,7 @@ secure("INSERT INTO blocked_users (user_id, by_user_id) VALUES (:uid, :aid)", [
 ```
 
 ---
+
 
 ## 📱 Handling Different Message Types
 
