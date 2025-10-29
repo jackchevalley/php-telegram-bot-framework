@@ -3,16 +3,16 @@ if (!defined('MAINSTART')) { die(); }
 if (!isset($userID)) die();
 
 
-// Controllo di sicurezza, anche se ridondante
+// Security check, even if redundant
 if (!$is_admin and !in_array($chatID, $ADMIN_CHATS)) {
     die();
 }
 
 
-// Messaggi di testo
+// Text messages
 if (isset($msg)) {
 
-    // Comandi
+    // Commands
     if (str_starts_with($msg, '/')) {
 
 
@@ -22,16 +22,16 @@ if (isset($msg)) {
         }
 
 
-        // Comandi riservati agli AMMINISTRATORI
+        // Commands reserved for ADMINISTRATORS
         if ($is_admin) {
 
-            // Comando per visualizzare l'elenco dei comandi admin
+            // Command to display the list of admin commands
             if ($msg == '/admin_commands' or $msg == '/help_admin') {
 
                 $text = [];
-                $text[] = "🔧 <b>Comandi Amministratore</b>";
+                $text[] = "🔧 <b>Administrator Commands</b>";
                 $text[] = "";
-                $text[] = "Da implementare...";
+                $text[] = "To be implemented...";
 
                 $inline_menu = [$hide_button_row];
                 sm($chatID, $text, $inline_menu);
@@ -43,14 +43,14 @@ if (isset($msg)) {
         }
 
 
-        // Comandi riservati a tutti i componenti del gruppo GENERIC_ADMIN_CHAT
+        // Commands reserved for all members of the GENERIC_ADMIN_CHAT group
         if ($userID == $adm or $chatID == $GENERIC_ADMIN_CHAT_ID) {
 
-            // Status del server e delle richieste
+            // Server and request status
             if ($msg == '/status') {
                 require_once __DIR__ . '/../../public/metrics_functions.php';
 
-                // Raccogli tutte le metriche
+                // Collect all metrics
                 $cpuUsage = getCpuUsage();
                 $cpuCores = getCpuCores();
                 $memInfo = getMemoryInfo();
@@ -64,15 +64,15 @@ if (isset($msg)) {
                 // Test telegram connectivity
                 $requestsPerf = testRequestsPerformance();
 
-                // Costruisci messaggio
+                // Build message
                 $text = [];
-                $text[] = "🤖 <b>Stato Sistema</b>";
+                $text[] = "🤖 <b>System Status</b>";
                 $text[] = "";
 
-                // Sezione Server
+                // Server Section
                 $text[] = "📊 <b>SERVER</b>";
                 $cpuEmoji = $cpuUsage < 60 ? '✅' : ($cpuUsage < 90 ? '⚠️' : '🔴');
-                $text[] = "• CPU: $cpuEmoji <code>$cpuUsage%</code> ($cpuCores core)";
+                $text[] = "• CPU: $cpuEmoji <code>$cpuUsage%</code> ($cpuCores cores)";
 
                 if ($memInfo) {
                     $ramEmoji = $memInfo['percent'] < 55 ? '✅' : ($memInfo['percent'] < 75 ? '⚠️' : '🔴');
@@ -80,22 +80,22 @@ if (isset($msg)) {
                 }
 
                 $diskEmoji = $diskUsage['percent'] < 55 ? '✅' : ($diskUsage['percent'] < 75 ? '⚠️' : '🔴');
-                $text[] = "• Disco: $diskEmoji <code>{$diskUsage['used']} / {$diskUsage['total']} ({$diskUsage['percent']}%)</code>";
+                $text[] = "• Disk: $diskEmoji <code>{$diskUsage['used']} / {$diskUsage['total']} ({$diskUsage['percent']}%)</code>";
 
                 $text[] = "• Uptime: <code>$systemUptime</code>";
                 $text[] = "• Load Avg: <code>{$loadAvg['1min']} | {$loadAvg['5min']} | {$loadAvg['15min']}</code>";
                 $text[] = "";
 
-                // Sezione Database
+                // Database Section
                 $text[] = "💾 <b>DATABASE</b>";
                 $text[] = "• Status: {$dbPerf['status']} <code>{$dbPerf['text']}</code>";
                 $text[] = "  Query Test: <code>{$dbPerf['time']} ms</code>";
                 $text[] = "";
 
-                // Sezione Bot
+                // Bot Section
                 $text[] = "🔧 <b>BOT INFO</b>";
-                $text[] = "• Picco memoria: <code>". formatBytes(memory_get_peak_usage()) ."</code>";
-                $text[] = "• Connettività API: {$requestsPerf['status']} <code>{$requestsPerf['text']}</code>";
+                $text[] = "• Peak memory: <code>". formatBytes(memory_get_peak_usage()) ."</code>";
+                $text[] = "• API Connectivity: {$requestsPerf['status']} <code>{$requestsPerf['text']}</code>";
                 $text[] = "  Request Test: <code>{$requestsPerf['time']} ms</code>";
 
                 $inline_menu = [$hide_button_row];
@@ -111,7 +111,7 @@ if (isset($msg)) {
     // Input
     else {
 
-        // Risposta ai feedback
+        // Reply to feedback
         if (isset($update['message']['reply_to_message'])) {
             $replyMessage = $update['message']['reply_to_message'];
             $replyText = $replyMessage['text'] ?? '';
