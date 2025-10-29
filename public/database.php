@@ -5,14 +5,14 @@ if(!defined('MAINSTART')) { die(); }
 require_once 'env_loader.php';
 load_env();
 
-// Definisci se il database è abilitato
+// Define if database is enabled
 define(
     "DB_ENABLED",
     isset($_ENV['DB_ENABLED']) && $_ENV['DB_ENABLED'] === "true"
 );
 
 
-// Funzione per connettersi al database
+// Function to connect to the database
 function db_connect() {
     try {
         // Check if a global database connection already exists, if so, return it
@@ -32,13 +32,13 @@ function db_connect() {
         return $db;
     }
     catch (PDOException $e) {
-        echo "Errore: " . $e->getMessage() . PHP_EOL;
+        echo "Error: " . $e->getMessage() . PHP_EOL;
         die();
     }
 }
 
 
-// Funzione per eseguire query in modo sicuro
+// Function to execute queries securely
 function secure ($sql, $par = 0, $fc = 0): array | int | null {
     if (!DB_ENABLED) {
         return null;
@@ -50,59 +50,62 @@ function secure ($sql, $par = 0, $fc = 0): array | int | null {
     }
 
     try {
-		$sc = $db->prepare($sql);
-		if(isset($par) and $par)
-			$sc->execute($par);
-		else
-			$sc->execute();
-	}
-	catch (PDOException $e) {
-		echo "Errore: " . $e->getMessage() . PHP_EOL;
-		if (function_exists("sm") && isset($GLOBALS['admin_errors_ID'])) {
-            sm($GLOBALS['admin_errors_ID'], "Riscontrato errore QUERY\n\n" . $e->getMessage() . "\n\n<b>Qry:</b> \n<code>" . $sql . "</code>");
+        $sc = $db->prepare($sql);
+        if(isset($par) and $par)
+            $sc->execute($par);
+        else
+            $sc->execute();
+    }
+    catch (PDOException $e) {
+        echo "Error: " . $e->getMessage() . PHP_EOL;
+        if (function_exists("sm") && isset($GLOBALS['admin_errors_ID'])) {
+            sm(
+                $GLOBALS['admin_errors_ID'],
+                "Query error encountered\n\n" . $e->getMessage() . "\n\n<b>Qry:</b> \n<code>" . $sql . "</code>"
+            );
         }
 
         error_log("PDO Error: " . $e->getMessage() . " | Query: " . $sql . " | Params: " . json_encode($par));
-		die();
-	}
+        die();
+    }
 
-    // Fetch risultati
-	if(isset($fc) and $fc) {
-		switch ($fc) {
-			case 1:
-				return $sc->fetch(PDO::FETCH_ASSOC); //fetch primo risultato
-			case 2:
-				return $sc->rowCount(); //fetch numero risultati
-			case 3:
-				return $sc->fetchAll(); //fetch di tutti risultati
-			case 4:
-				return $db->lastInsertId(); //fetch ultimo id inserito
-		}
-	}
+    // Fetch results
+    if(isset($fc) and $fc) {
+        switch ($fc) {
+            case 1:
+                return $sc->fetch(PDO::FETCH_ASSOC); // fetch first result
+            case 2:
+                return $sc->rowCount(); // fetch number of results
+            case 3:
+                return $sc->fetchAll(); // fetch all results
+            case 4:
+                return $db->lastInsertId(); // fetch last inserted id
+        }
+    }
 
-	return null;
+    return null;
 }
 
 
-// Funzioni per gestione transazioni
+// Functions for transaction management
 function transaction_start($sql, $params = [], bool $fetch_many = false): array | bool | null {
-	global $db;
-	try {
-		$db->beginTransaction();
-		$stmt = $db->prepare($sql . " FOR UPDATE");
-		$stmt->execute($params);
-		return ($fetch_many) ?
+    global $db;
+    try {
+        $db->beginTransaction();
+        $stmt = $db->prepare($sql . " FOR UPDATE");
+        $stmt->execute($params);
+        return ($fetch_many) ?
             $stmt->fetchAll(PDO::FETCH_ASSOC)
             : $stmt->fetch(PDO::FETCH_ASSOC);
-	} catch (PDOException $e) {
-		echo "Errore: " . $e->getMessage() . PHP_EOL;
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage() . PHP_EOL;
         error_log("PDO Transaction Error: " . $e->getMessage() . " | Query: " . $sql . " | Params: " . json_encode($params));
-		$db->rollBack();
+        $db->rollBack();
 
-		die();
-	}
+        die();
+    }
     catch (Exception $e) {
-        echo "Errore: " . $e->getMessage() . PHP_EOL;
+        echo "Error: " . $e->getMessage() . PHP_EOL;
         error_log("General Transaction Error: " . $e->getMessage() . " | Query: " . $sql . " | Params: " . json_encode($params));
         $db->rollBack();
 
@@ -111,28 +114,28 @@ function transaction_start($sql, $params = [], bool $fetch_many = false): array 
 }
 
 
-// Commit della transazione
+// Commit the transaction
 function transaction_commit(): void {
-	global $db;
-	try {
-		$db->commit();
-	} catch (PDOException $e) {
-		echo "Errore: " . $e->getMessage() . PHP_EOL;
-		$db->rollBack();
-		die();
-	}
+    global $db;
+    try {
+        $db->commit();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage() . PHP_EOL;
+        $db->rollBack();
+        die();
+    }
 }
 
 
-// Rollback della transazione
+// Rollback the transaction
 function transaction_rollback(): void {
-	global $db;
-	try {
-		$db->rollBack();
-	} catch (PDOException $e) {
-		echo "Errore: " . $e->getMessage() . PHP_EOL;
-		die();
-	}
+    global $db;
+    try {
+        $db->rollBack();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage() . PHP_EOL;
+        die();
+    }
 }
 
 

@@ -407,7 +407,7 @@ function copyMessage(int $chatID, int $from_chatID, int $message_id, string $cap
     }
     else {
         if($chatID == $GLOBALS['admin_errors_ID'])
-            sm($chatID, "Errore copyMessage: ". $response['description'], parse_mode: '');
+            sm($chatID, "copyMessage error: ". $response['description'], parse_mode: '');
 
         return $response['description'];
     }
@@ -472,7 +472,7 @@ function edit_text(int $chatID, int $message_id, int|string|array $text, array $
     $response = request('editMessageText', $args);
     if (!isset($response['ok']) or !$response['ok']) {
         if ($chatID == $GLOBALS['admin_errors_ID'])
-            sm($chatID, "Errore edit_text: " . $response['description'], parse_mode: '');
+            sm($chatID, "edit_text error: " . $response['description'], parse_mode: '');
         return false;
     }
     return true;
@@ -501,7 +501,7 @@ function edit_keyboard(int $chatID, int $message_id, array $menu = []): bool {
     $response = request('editMessageReplyMarkup', $args);
     if (!isset($response['ok']) or !$response['ok']) {
         if ($chatID == $GLOBALS['admin_errors_ID'])
-            sm($chatID, "Errore edit_keyboard: " . $response['description'], parse_mode: '');
+            sm($chatID, "edit_keyboard error: " . $response['description'], parse_mode: '');
         return false;
     }
     return true;
@@ -602,7 +602,7 @@ function sendImage(int $chatID, string $photo, string|array $caption = '', array
     }
     else {
         if($chatID == $GLOBALS['admin_errors_ID'])
-            sm($chatID, "Errore sendImage: ". $response['description'], parse_mode: '');
+            sm($chatID, "sendImage error: ". $response['description'], parse_mode: '');
 
         return $response['description'];
     }
@@ -654,7 +654,7 @@ function sendVideo(int $chatID, string $video, string|array $caption = '', array
     }
     else {
         if($chatID == $GLOBALS['admin_errors_ID'])
-            sm($chatID, "Errore sendVideo: ". $response['description'], parse_mode: '');
+            sm($chatID, "sendVideo error: ". $response['description'], parse_mode: '');
 
         return $response['description'];
     }
@@ -696,7 +696,7 @@ function sendVideoNote(int $chatID, string $video_note, array $menu = [], int|bo
     }
     else {
         if($chatID == $GLOBALS['admin_errors_ID'])
-            sm($chatID, "Errore sendVideoNote: ". $response['description'], parse_mode: '');
+            sm($chatID, "sendVideoNote error: ". $response['description'], parse_mode: '');
 
         return $response['description'];
     }
@@ -746,7 +746,7 @@ function sendVoice(int $chatID, string $voice, string|array $caption = '', array
     }
     else {
         if($chatID == $GLOBALS['admin_errors_ID'])
-            sm($chatID, "Errore sendVoice: ". $response['description'], parse_mode: '');
+            sm($chatID, "sendVoice error: ". $response['description'], parse_mode: '');
 
         return $response['description'];
     }
@@ -797,7 +797,7 @@ function sendAnimation(int $chatID, string $animation, string|array $caption = '
     }
     else {
         if($chatID == $GLOBALS['admin_errors_ID'])
-            sm($chatID, "Errore sendAnimation: ". $response['description'], parse_mode: '');
+            sm($chatID, "sendAnimation error: ". $response['description'], parse_mode: '');
 
         return $response['description'];
     }
@@ -838,7 +838,7 @@ function sendSticker(int $chatID, string $sticker, array $menu = [], int|bool $r
     }
     else {
         if($chatID == $GLOBALS['admin_errors_ID'])
-            sm($chatID, "Errore sendSticker: ". $response['description'], parse_mode: '');
+            sm($chatID, "sendSticker error: ". $response['description'], parse_mode: '');
 
         return $response['description'];
     }
@@ -882,7 +882,7 @@ function sendLocation(int $chatID, float $latitude, float $longitude, array $men
     }
     else {
         if($chatID == $GLOBALS['admin_errors_ID'])
-            sm($chatID, "Errore sendLocation: ". $response['description'], parse_mode: '');
+            sm($chatID, "sendLocation error: ". $response['description'], parse_mode: '');
 
         return $response['description'];
     }
@@ -935,7 +935,7 @@ function sendVenue(int $chatID, float $latitude, float $longitude, string $title
     }
     else {
         if($chatID == $GLOBALS['admin_errors_ID'])
-            sm($chatID, "Errore sendVenue: ". $response['description'], parse_mode: '');
+            sm($chatID, "sendVenue error: ". $response['description'], parse_mode: '');
 
         return $response['description'];
     }
@@ -1184,7 +1184,7 @@ function cut_text(string $text, int $max_length): string {
  */
 function resolve_username_to_id(int|string $content): int | false {
 
-    // Se è già un ID numerico, controlla esistenza e ritorna
+    // If it's already a numeric ID, check existence and return
     if (is_numeric($content)){
         $check = secure('SELECT * FROM users WHERE user_id = :chat', [
             'chat' => (int)$content
@@ -1192,7 +1192,7 @@ function resolve_username_to_id(int|string $content): int | false {
         return (isset($check['user_id'])) ? (int)$check['user_id'] : false;
     }
 
-    // Se è un username, rimuovi @ e cerca
+    // If it's a username, remove @ and search
     $username = ltrim($content, '@');
     $check = secure('SELECT * FROM users WHERE username = :username', [
         'username' => $username
@@ -1494,6 +1494,6 @@ function build(string $sql, array|null $array = [], bool $force_to_admin = false
         ($chatID === $GLOBALS['admin_errors_ID'] or $force_to_admin)
         and function_exists("sm")
     ) {
-        sm($GLOBALS['admin_errors_ID'], "<b>BUILD ESEGUITO</b> \n\n<code>" . $sql . "</code>\n\n<code>" . print_r($array, true) . "</code>");
+        sm($GLOBALS['admin_errors_ID'], "<b>BUILD EXECUTED</b> \n\n<code>" . $sql . "</code>\n\n<code>" . print_r($array, true) . "</code>");
     }
 }

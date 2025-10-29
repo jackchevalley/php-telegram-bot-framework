@@ -39,11 +39,11 @@ CREATE TABLE IF NOT EXISTS `users`
     `username`   varchar(32)          DEFAULT NULL,
     `last_id`    int(11)     NOT NULL DEFAULT 0,
     `temp`       varchar(500)         DEFAULT NULL,
-    `attivo`     tinyint(1)  NOT NULL DEFAULT 1,
+    `active`     tinyint(1)  NOT NULL DEFAULT 1,
     PRIMARY KEY (`ID`),
     UNIQUE KEY `user_id` (`user_id`),
     UNIQUE KEY `uuid` (`uuid`),
-    KEY `attivo` (`attivo`)
+    KEY `active` (`active`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_uca1400_ai_ci;

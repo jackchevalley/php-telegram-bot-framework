@@ -1,7 +1,7 @@
 <?php
 if (!defined('MAINSTART')) { die(); }
 
-// Carica le variabili d'ambiente
+// Load environment variables
 require_once "env_loader.php";
 load_env();
 
@@ -9,9 +9,9 @@ $REDIS_BASE_KEY = $_ENV['REDIS_BASE_KEY'] ?? 'project_base_key';
 
 
 /**
- * Ottiene una connessione Redis globale
- * @return Redis Connessione Redis
- * @throws Exception Se la connessione fallisce
+ * Get a global Redis connection
+ * @return Redis Redis connection
+ * @throws Exception If connection fails
  */
 function getRedisConnection(): Redis {
     $REDIS_PASSWORD = $_ENV['REDIS_PASSWORD'] ?? '';
@@ -33,13 +33,13 @@ function getRedisConnection(): Redis {
         }
     }
 
-    // Configurazione connessione Redis (localhost di default)
+    // Redis connection configuration (localhost by default)
     $redis = new Redis();
     try {
         $redis->connect($REDIS_HOST);
         $redis->auth($REDIS_PASSWORD);
     } catch (RedisException $e) {
-        throw new Exception("Impossibile connettersi a Redis: " . $e->getMessage());
+        throw new Exception("Unable to connect to Redis: " . $e->getMessage());
     }
 
     # Store the connection in a global variable
@@ -48,7 +48,7 @@ function getRedisConnection(): Redis {
 }
 
 /**
- * Chiude la connessione Redis globale se esiste
+ * Close the global Redis connection if it exists
  */
 function closeRedisConnection(): void {
     if (isset($GLOBALS['redis'])) {
@@ -63,11 +63,11 @@ function closeRedisConnection(): void {
 }
 
 /**
- * Genera la chiave Redis per un utente e sezione specifica
- * Formato: project_base_key:section:user_id
- * @param string $section Sezione specifica (es. 'ratelimit', 'spam_count', ecc.)
- * @param int $userID ID utente (opzionale, default 0)
- * @return string Chiave Redis completa
+ * Generate the Redis key for a user and specific section
+ * Format: project_base_key:section:user_id
+ * @param string $section Specific section (e.g., 'ratelimit', 'spam_count', etc.)
+ * @param int $userID User ID (optional, default 0)
+ * @return string Complete Redis key
  */
 function getRedisBaseKey(string $section, int $userID = 0, ...$extraParts): string {
     $key = $GLOBALS['REDIS_BASE_KEY'] . ':' . $section;

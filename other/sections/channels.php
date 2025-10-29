@@ -1,7 +1,7 @@
 <?php
 if (!defined('MAINSTART')) { die(); }
 
-// Variabili generali
+// General variables
 require_once __DIR__ . '/../../public/configs.php';
 
 die();

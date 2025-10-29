@@ -14,7 +14,7 @@ require_once BASE_ROOT . '/public/libs/vendor/autoload.php';
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise;
 
-// Crea il client delle richieste
+// Create the request client
 $client = new Client([
     'base_uri' => 'https://api.telegram.org/'. $API .'/',
     'timeout'  => 0
@@ -67,7 +67,7 @@ unlink(BASE_ROOT .'/data/posts/post_info.json');
 
 // Collect users
 logger("[INFO] Post found, collecting users...", break_line: True);
-$users = secure('SELECT * FROM users WHERE attivo = 1', 0, 3);
+$users = secure('SELECT * FROM users WHERE active = 1', 0, 3);
 if (empty($users)) {
     logger("[INFO] No users found", break_line: True);
     exit;
@@ -140,7 +140,7 @@ foreach ($user_chunks as $chunk_index => $chunk) {
 
                     // Mark user as inactive if not a flood wait error
                     if (!str_starts_with($error_desc, "Too Many Requests")) {
-                        secure('UPDATE users SET attivo = 0 WHERE user_id = '. $user['user_id']);
+                        secure('UPDATE users SET active = 0 WHERE user_id = '. $user['user_id']);
                     }
                 }
             } catch (Exception $e) {
@@ -161,7 +161,7 @@ foreach ($user_chunks as $chunk_index => $chunk) {
 
             // Mark user as inactive
             if (!str_contains($error_msg, "Too Many Requests")) {
-                secure('UPDATE users SET attivo = 0 WHERE user_id = '. $user['user_id']);
+                secure('UPDATE users SET active = 0 WHERE user_id = '. $user['user_id']);
             }
         }
     }
@@ -173,11 +173,11 @@ foreach ($user_chunks as $chunk_index => $chunk) {
         $success_percent = round(($success / ($sent ?: 1)) * 100, 2);
 
         $cb_text = [];
-        $cb_text[] = "⚙️ <b>Invio post globale...</b> ";
+        $cb_text[] = "⚙️ <b>Sending global post...</b> ";
         $cb_text[] = "";
-        $cb_text[] = "📤 Inviato a <b>". $sent ."</b> utenti su <b>". $total_users ."</b> (<b>". $percent ."%</b>)";
-        $cb_text[] = "✅ Successi: <b>". $success ."</b> (<b>". $success_percent ."%</b>)";
-        $cb_text[] = "❌ Errori: <b>". $errors ."</b>";
+        $cb_text[] = "📤 Sent to <b>". $sent ."</b> users out of <b>". $total_users ."</b> (<b>". $percent ."%</b>)";
+        $cb_text[] = "✅ Successes: <b>". $success ."</b> (<b>". $success_percent ."%</b>)";
+        $cb_text[] = "❌ Errors: <b>". $errors ."</b>";
 
         edit_text($post_info['chat_id'], $post_info['cbm_id'], $cb_text);
         sleep(1);
@@ -216,11 +216,11 @@ if ($post_info['cbm_id']) {
 
 
     $cb_text = [];
-    $cb_text[] = "⚙️ <b>Invio post globale completato!</b> ";
+    $cb_text[] = "⚙️ <b>Sending completed!</b> ";
     $cb_text[] = "";
-    $cb_text[] = "📤 Inviato a <b>". count($users) ."</b> utenti su <b>". count($users) ."</b> (<b>". $percent ."%</b>)";
-    $cb_text[] = "✅ Successi: <b>". $success ."</b> (<b>". $success_percent ."%</b>)";
-    $cb_text[] = "❌ Errori: <b>". $errors ."</b>";
+    $cb_text[] = "📤 Sent to <b>". count($users) ."</b> utenti su <b>". count($users) ."</b> (<b>". $percent ."%</b>)";
+    $cb_text[] = "✅ Successes: <b>". $success ."</b> (<b>". $success_percent ."%</b>)";
+    $cb_text[] = "❌ Errors: <b>". $errors ."</b>";
 
     // Edit message
     edit_text($post_info['chat_id'], $post_info['cbm_id'], $cb_text);

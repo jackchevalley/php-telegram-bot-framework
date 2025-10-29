@@ -4,24 +4,24 @@ if(!defined('MAINSTART')) { die(); }
 
 
 // ============================================
-// CONFIGURAZIONE BASE BOT
+// BASE BOT CONFIGURATION
 // ============================================
-const INTERNAL_USER_ID = 0;     // ID usato per i messaggi di sistema
+const INTERNAL_USER_ID = 0;     // ID used for system messages
 
-//Username del bot
+// Bot username
 $bot_username = "YourBotUsername_bot";
 
-// Dominio del bot
+// Bot domain
 $DOMAIN_URL = "https://your-domain.com/";
 
-// Elenco degli admin (ID Telegram) | The first one is the main admin
+// Admin list (Telegram IDs) | The first one is the main admin
 $MAIN_ADMIN = 158472703;
 $ADMINS = [
     $MAIN_ADMIN,
     // more admins...
 ];
 
-$GENERIC_ADMIN_CHAT_ID = -100131213121312; // Chat generica per gli admin
+$GENERIC_ADMIN_CHAT_ID = -100131213121312; // Generic chat for admins
 $ADMIN_CHATS = [
     $GENERIC_ADMIN_CHAT_ID,
     // more admin chats...
@@ -30,15 +30,15 @@ $ADMIN_CHATS = [
 
 
 // ============================================
-// LIMITI GENERICI
+// GENERIC LIMITS
 // ============================================
 
-// Limiti dimensione testo per alias comandi
+// Text size limit for command aliases
 $LIMIT_MSG_ALIAS_LENGTH = 50;
 
 
 
 // ============================================
-// ALTRI PARAMETRI
+// OTHER PARAMETERS
 // ============================================
 

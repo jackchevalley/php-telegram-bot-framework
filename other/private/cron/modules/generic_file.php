@@ -12,7 +12,7 @@ require_once BASE_ROOT . '/public/functions.php';
 require_once BASE_ROOT . '/other/private/cron/resources/configs.php';
 require_once BASE_ROOT . '/other/private/cron/resources/functions.php';
 
-// Crea il client delle richieste
+// Create the request client
 use GuzzleHttp\Client;
 $client = new Client([
     'base_uri' => 'https://api.telegram.org/'. $API .'/',

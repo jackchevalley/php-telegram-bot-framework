@@ -19,26 +19,26 @@ elseif (isset($msg) and ($msg == '/del' or $msg == '/del_2')) {
 
 
 
-//CREAZIONE VARIABILI
+// VARIABLE CREATION
 if (true) {
 
-    //Amministratori - verifica se l'utente corrente è un admin
+    // Admins - verify if the current user is an admin
     $is_admin = in_array($userID, $ADMINS);
     $adm = $is_admin ? $userID : $MAIN_ADMIN;
 
 
-    // Utili da usare nei testi e nei bottoni, emp sarebbe il carattere invisibile
+    // Useful for use in texts and buttons, emp is the invisible character
     $bin = "🗑";
     $emp = "ㅤ";
-    $bc = "Indietro 🔙";
+    $bc = "Back 🔙";
 
 
-    // Bottoni e testi comuni
+    // Common buttons and texts
     $hide_button_row = [['text' => $bin, 'callback_data' => '/del_2']];
 
 
 
-    // Funzione base per gestione input db
+    // Base function for db input management
     function temp($val = null, $userID = null): void {
         if (!$userID) global $userID;
         if (!$val) $val = null;
@@ -48,10 +48,10 @@ if (true) {
 
 
 
-    // VARIABILI UTENTE E DATABASE
+    // USER AND DATABASE VARIABLES
     if (isset($userID) && $userID && defined('DB_ENABLED') && DB_ENABLED) {
 
-        // Dati utente e impostazioni | Inizializzazione nuovo utente
+        // User data and settings | New user initialization
         $us = secure("SELECT * FROM users WHERE user_id = :id", ['id' => $userID], 1);
         if (!(isset($us['user_id']))) {
 
@@ -61,14 +61,14 @@ if (true) {
                 'username' => $username ?? null
             ]);
 
-            // Ricarico i dati
+            // Reload the data
             $us = secure("SELECT * FROM users WHERE user_id = :id", ['id' => $userID], 1);
         }
         if (!$us['temp']) $us['temp'] = "";
 
-        // Aggiorna dati utente
+        // Update user data
         $new_username = $username ?? null;
-        if ($us['first_name'] != $nome || $us['username'] != $new_username || !$us['attivo']) {
+        if ($us['first_name'] != $nome || $us['username'] != $new_username || !$us['active']) {
 
             $query_params = [];
             $query_args = [];
@@ -82,12 +82,12 @@ if (true) {
                 $query_args['u'] = $new_username;
                 $us['username'] = $new_username;
             }
-            if (!$us['attivo']) {
-                $query_params[] .= "attivo = 1";
-                $us['attivo'] = 1;
+            if (!$us['active']) {
+                $query_params[] .= "active = 1";
+                $us['active'] = 1;
             }
 
-            // Update se necessario
+            // Update if necessary
             if (count($query_params)) {
 
                 $query_args['id'] = $userID;
@@ -106,7 +106,7 @@ if (true) {
         $user_tag = getUserTag($userID, $nome, $username ?? '');
 
 
-        // UTENTI BLOCCATI
+        // BLOCKED USERS
         $bot_blocked_users = secure("SELECT * FROM blocked_users WHERE user_id = :id AND enabled = 1 ORDER BY ID DESC", ['id' => $userID], 1);
         if (isset($bot_blocked_users['user_id'])) {
 
@@ -119,7 +119,7 @@ if (true) {
 
 
 
-    // REDIRECT A PANNELLI GRUPPI E CANALI
+    // REDIRECT TO GROUP AND CHANNEL PANELS
     if ($chatID < 0) {
         if (isset($userID)) require_once 'other/sections/groups.php';
         else require_once 'other/sections/channels.php';
@@ -129,40 +129,40 @@ if (true) {
 
 
 
-// Gestione dei messaggi di testo
+// Text message handling
 if (isset($msg)) {
 
-    // CONTROLLARE CHE TUTTI I COMANDI DENTRO GLI HARD MENU SIANO QUI PRESENTI
+    // CHECK THAT ALL COMMANDS INSIDE HARD MENUS ARE PRESENT HERE
     $COMMANDS_ALIAS = [
         '/command_one' => '/start',
         '/command_two' => '/miao',
     ];
 
 
-    // Controllo se il messaggio è un alias di un comando
+    // Check if the message is a command alias
     if (strlen($msg) < $LIMIT_MSG_ALIAS_LENGTH and isset($COMMANDS_ALIAS[$msg])) $msg = $COMMANDS_ALIAS[$msg];
 
 
-    // SEZIONE DEI COMANDI
+    // COMMANDS SECTION
     if (str_starts_with($msg, '/')) {
 
 
-        // Comando iniziala, start
+        // Initial command, start
         if ($msg == "/start") {
 
             $text = [];
-            $text[] = "<b>Benvenuto <a href='tg://user?id=$userID'>$nome</a>!</b>";
+            $text[] = "<b>Welcome <a href='tg://user?id=$userID'>$nome</a>!</b>";
             $text[] = "";
-            $text[] = "Il bot funziona...";
+            $text[] = "The bot is working...";
             $text[] = date("Y-m-d H:i:s");
 
             $inline_menu = [];
             $inline_menu[] = [
-                ['text' => "Bottone uno", 'callback_data' => '/command_one'],
+                ['text' => "Button one", 'callback_data' => '/command_one'],
             ];
             $inline_menu[] = [
-                ['text' => "Bottone due", 'callback_data' => '/command_two'],
-                ['text' => "Bottone tre", 'callback_data' => '/miao']
+                ['text' => "Button two", 'callback_data' => '/command_two'],
+                ['text' => "Button three", 'callback_data' => '/miao']
             ];
 
 
@@ -176,7 +176,7 @@ if (isset($msg)) {
             temp();
         }
 
-        // Comando miao
+        // Miao command
         elseif ($msg == "/miao") {
             lock_non_callback();
 
@@ -190,10 +190,9 @@ if (isset($msg)) {
         }
 
 
-        // Altri comandi qui...
+        // Other commands here...
 
 
-        //Sezione Amministratori
         elseif ($is_admin) {
 
             require_once 'other/sections/admin_commands.php';

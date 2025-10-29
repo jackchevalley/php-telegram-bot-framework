@@ -2,7 +2,7 @@
 if (!defined('MAINSTART')) { die(); }
 
 
-// Funzione per ottenere l'utilizzo della CPU
+// Function to get CPU usage
 function getCpuUsage(): float {
     $load = sys_getloadavg();
     $cpuCores = getCpuCores();
@@ -10,7 +10,7 @@ function getCpuUsage(): float {
     return round($cpuPercent, 2);
 }
 
-// Funzione per ottenere il numero di core CPU
+// Function to get the number of CPU cores
 function getCpuCores(): int {
     if (PHP_OS_FAMILY === 'Linux') {
         $output = shell_exec('nproc');
@@ -19,7 +19,7 @@ function getCpuCores(): int {
     return 1; // Fallback
 }
 
-// Funzione per ottenere info sulla RAM
+// Function to get RAM info
 function getMemoryInfo(): ?array {
     if (PHP_OS_FAMILY === 'Linux') {
         $memInfo = file_get_contents('/proc/meminfo');
@@ -41,7 +41,7 @@ function getMemoryInfo(): ?array {
     return null;
 }
 
-// Funzione per ottenere uptime sistema
+// Function to get system uptime
 function getSystemUptime(): string {
     if (PHP_OS_FAMILY === 'Linux') {
         $uptime = shell_exec('uptime -p');
@@ -51,25 +51,25 @@ function getSystemUptime(): string {
 }
 
 
-// Funzione per testare performance database
+// Function to test database performance
 function testDatabasePerformance(): array {
     $start = microtime(true);
     try {
-        secure('SELECT * FROM users LIMIT 1', 0, 3); // Query di esempio
+        secure('SELECT * FROM users LIMIT 1', 0, 3); // Example query
         $duration = round((microtime(true) - $start) * 1000, 2); // ms
         if ($duration < 10) {
-            return ['status' => '✅', 'time' => $duration, 'text' => 'Ottimo'];
+            return ['status' => '✅', 'time' => $duration, 'text' => 'Excellent'];
         } elseif ($duration < 50) {
-            return ['status' => '⚠️', 'time' => $duration, 'text' => 'Buono'];
+            return ['status' => '⚠️', 'time' => $duration, 'text' => 'Good'];
         } else {
-            return ['status' => '⚠️', 'time' => $duration, 'text' => 'Lento'];
+            return ['status' => '⚠️', 'time' => $duration, 'text' => 'Slow'];
         }
     } catch (Exception) {
-        return ['status' => '❌', 'time' => 0, 'text' => 'Errore'];
+        return ['status' => '❌', 'time' => 0, 'text' => 'Error'];
     }
 }
 
-// Funzione per testare performance requests
+// Function to test request performance
 function testRequestsPerformance(): array {
 
     // Perform a simple request to the bot API and measure time
@@ -86,7 +86,7 @@ function testRequestsPerformance(): array {
         }
     }
 
-    // Esegui 3 test e prendi il migliore
+    // Execute 3 tests and take the average
     $NUMBER_OF_REQUESTS = 3;
     $result = 0;  // Initialize the variable
     for ($i = 0; $i < $NUMBER_OF_REQUESTS; $i++) {
@@ -95,21 +95,21 @@ function testRequestsPerformance(): array {
 
     $average = round($result / $NUMBER_OF_REQUESTS, 2);
     if ($average < 50) {
-        return ['status' => '✅', 'time' => $average, 'text' => 'Ottimo'];
+        return ['status' => '✅', 'time' => $average, 'text' => 'Excellent'];
     }
     elseif ($average < 120) {
-        return ['status' => '✅', 'time' => $average, 'text' => 'Buono'];
+        return ['status' => '✅', 'time' => $average, 'text' => 'Good'];
     }
     elseif ($average < 180) {
-        return ['status' => '⚠️', 'time' => $average, 'text' => 'Discreto'];
+        return ['status' => '⚠️', 'time' => $average, 'text' => 'Fair'];
     }
     else {
-        return ['status' => '⚠️', 'time' => $average, 'text' => 'Lento'];
+        return ['status' => '⚠️', 'time' => $average, 'text' => 'Slow'];
     }
 }
 
 
-// Funzione per ottenere Load Average
+// Function to get Load Average
 function getLoadAverage(): array {
     $load = sys_getloadavg();
     return [
@@ -119,7 +119,7 @@ function getLoadAverage(): array {
     ];
 }
 
-// Funzione helper per formattare i bytes
+// Helper function to format bytes
 function formatBytes(int $bytes, int $precision = 2): string {
     $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
 
@@ -130,7 +130,7 @@ function formatBytes(int $bytes, int $precision = 2): string {
     return round($bytes, $precision) . ' ' . $units[$i];
 }
 
-// Funzione per ottenere spazio disco
+// Function to get disk space
 function getDiskUsage(): array {
     $total = disk_total_space('/');
     $free = disk_free_space('/');
