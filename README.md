@@ -76,6 +76,7 @@ I've been using and improving it for years, and almost every bot I create is bas
 - Composer
 - Web server with HTTPS support (Telegram requires HTTPS for webhooks)
 - Linux server (recommended for metrics features)
+- You can read the [Linux Setup Guide](extra/linux/setup-ubuntu25.md) for a complete server setup.
 
 ---
 
