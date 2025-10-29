@@ -14,7 +14,7 @@ if(isset($_SERVER['REMOTE_ADDR'])) {
 	ignore_user_abort(true);
 
 	$out = json_encode([
-		'ok' => True,
+		'ok' => true,
 		'text' => "Developed by <a href='https://t.me/JacksWork'>@JackChevalley</a>"
 	]);
 
@@ -52,7 +52,7 @@ $client = new Client([
 	'timeout'  => 0
 ]);
 
-// unset for security, we don't need it anymore since is already in base_uri, better not having it around
+// Unset for security, we don't need it anymore since it's already in base_uri, better not having it around
 unset($api);
 
 
@@ -76,7 +76,7 @@ if (!(isset($chatID) and is_numeric($chatID))) exit();
 
 ####################################################################
 # | Load environment variables and database functions
-// we do it at this point since we are sure that the request is from telegram and with valid parameters
+// We do it at this point since we are sure that the request is from Telegram and with valid parameters
 require_once 'public/env_loader.php';
 
 // Load database connection functions

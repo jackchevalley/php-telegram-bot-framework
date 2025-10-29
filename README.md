@@ -406,7 +406,7 @@ Create file in `other/private/cron/modules/`:
 <?php
 // other/private/cron/modules/send_daily_report.php
 
-if (!defined('MAINSTART')) { die(); }
+if(!defined('MAINSTART')) { die("<b>The request source has not been recognized. Make sure to execute from the provided entry point</b>"); }
 
 // Your task logic here
 $users = secure("SELECT * FROM users WHERE attivo = 1", 0, 3);

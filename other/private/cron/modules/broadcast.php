@@ -40,9 +40,9 @@ $SLEEP_BETWEEN_CHUNKS = 1;          // Sleep time between chunks (in seconds)
 # | Actual Script
 # Send post messages
 
-logger("[INFO] Checking for post...", break_line: True);
+logger("[INFO] Checking for post...", break_line: true);
 if (!file_exists(BASE_ROOT .'/data/posts/post_info.json')) {
-    logger("[INFO] No post found", break_line: True);
+    logger("[INFO] No post found", break_line: true);
     exit;
 }
 
@@ -51,12 +51,12 @@ if (!file_exists(BASE_ROOT .'/data/posts/post_info.json')) {
 // Get post info
 $post_info = json_decode(file_get_contents(BASE_ROOT .'/data/posts/post_info.json'), true);
 if (!$post_info or empty($post_info)) {
-    logger("[INFO] No data post found", break_line: True);
+    logger("[INFO] No data post found", break_line: true);
 }
 
 // Check if post is ready
 if (!$post_info['ready'] || ($post_info['send_at'] && $post_info['send_at'] > time())) {
-    logger("[INFO] Post not ready: ". ($post_info['ready'] ? (($post_info['send_at']) ? date('Y-m-d H:i') : "building") : 'Not marked as ready'), break_line: True);
+    logger("[INFO] Post not ready: ". ($post_info['ready'] ? (($post_info['send_at']) ? date('Y-m-d H:i') : "building") : 'Not marked as ready'), break_line: true);
     exit;
 }
 
@@ -66,10 +66,10 @@ unlink(BASE_ROOT .'/data/posts/post_info.json');
 
 
 // Collect users
-logger("[INFO] Post found, collecting users...", break_line: True);
+logger("[INFO] Post found, collecting users...", break_line: true);
 $users = secure('SELECT * FROM users WHERE active = 1', 0, 3);
 if (empty($users)) {
-    logger("[INFO] No users found", break_line: True);
+    logger("[INFO] No users found", break_line: true);
     exit;
 }
 
@@ -78,7 +78,7 @@ if (empty($users)) {
 ############################################################################
 # | Send the post to all users
 
-logger("[INFO] Sending post to ". count($users) ." users...\n", break_line: True);
+logger("[INFO] Sending post to ". count($users) ." users...\n", break_line: true);
 $errors_list = [];
 $success = 0;
 $errors = 0;
@@ -95,7 +95,7 @@ if (ADMIN_ONLY) {
 $user_chunks = array_chunk($users, $CHUNK_DIMENSION);
 $total_users = count($users);
 foreach ($user_chunks as $chunk_index => $chunk) {
-    logger("[INFO] Processing chunk ". ($chunk_index + 1) ."/". count($user_chunks) ." (". count($chunk) ." users)...", break_line: True);
+    logger("[INFO] Processing chunk ". ($chunk_index + 1) ."/". count($user_chunks) ." (". count($chunk) ." users)...", break_line: true);
 
     // Create promises for async requests
     $promises = [];

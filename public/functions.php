@@ -1,6 +1,6 @@
 <?php
 use GuzzleHttp\Exception\GuzzleException;
-if (!defined('MAINSTART')) { die(); }
+if(!defined('MAINSTART')) { die("<b>The request source has not been recognized. Make sure to execute from the provided entry point</b>"); }
 
 
 
@@ -8,20 +8,20 @@ if (!defined('MAINSTART')) { die(); }
 ###############################################################################################
 # GLOBAL CONSTANTS AND VARIABLES
 
-// Configurations and variables, we include them again to be sure they are available
+// Configurations and variables, we include them again to make sure they are available
 require_once 'configs.php';
 require_once 'env_loader.php';
 
 $admin_errors_ID = $MAIN_ADMIN;
 
 
-// CREATE VARIABLES FROM THE UPDATE
+    // CREATE VARIABLES FROM THE UPDATE
 if(isset($update)) {
     if(isset($update['channel_post']))
         $update['message'] = $update['channel_post'];
 
 
-    // skip successful payment messages, we handle pre checkout only
+    // Skip successful payment messages, we handle pre-checkout only
     if (isset($update['message']['successful_payment'])) die();
 
 
@@ -75,12 +75,12 @@ if(isset($update)) {
 
 
 
-    // messages
+    // Messages
     if(isset($update['message']['text'])) {
         $msg = $update["message"]["text"];
     }
 
-    // photo
+    // Photo
     elseif(isset($update['message']["photo"])) {
         $photo = $update["message"]["photo"];
         $photo = end($photo)['file_id'];
@@ -89,7 +89,7 @@ if(isset($update)) {
         $generic_file_id = $photo; // for logging purposes
     }
 
-    // video
+    // Video
     elseif(isset($update['message']["video"]['file_id'])) {
         $video = $update["message"]["video"]['file_id'];
         $MEDIA_TYPE = "video";
@@ -97,7 +97,7 @@ if(isset($update)) {
         $generic_file_id = $video; // for logging purposes
     }
 
-    // video note
+    // Video note
     elseif(isset($update['message']["video_note"]['file_id'])) {
         $video_note = $update["message"]["video_note"]['file_id'];
         $MEDIA_TYPE = "video_note";
@@ -105,7 +105,7 @@ if(isset($update)) {
         $generic_file_id = $video_note; // for logging purposes
     }
 
-    // audio (voice note)
+    // Audio (voice note)
     elseif(isset($update['message']["voice"]['file_id'])) {
         $voice = $update["message"]["voice"]['file_id'];
         $MEDIA_TYPE = "voice";
@@ -113,7 +113,7 @@ if(isset($update)) {
         $generic_file_id = $voice; // for logging purposes
     }
 
-    // animation (GIF)
+    // Animation (GIF)
     elseif(isset($update['message']["animation"]['file_id'])) {
         $animation = $update["message"]["animation"]['file_id'];
         $MEDIA_TYPE = "animation";
@@ -121,7 +121,7 @@ if(isset($update)) {
         $generic_file_id = $animation; // for logging purposes
     }
 
-    // sticker
+    // Sticker
     elseif(isset($update['message']["sticker"]['file_id'])) {
         $sticker = $update["message"]["sticker"]['file_id'];
         $MEDIA_TYPE = "sticker";
@@ -129,29 +129,29 @@ if(isset($update)) {
         $generic_file_id = $sticker; // for logging purposes
     }
 
-    // location
+    // Location
     elseif(isset($update['message']["location"])) {
         $location = $update["message"]["location"];
         $MEDIA_TYPE = "location";
     }
 
-    // venue
+    // Venue
     elseif(isset($update['message']["venue"])) {
         $venue = $update["message"]["venue"];
         $MEDIA_TYPE = "venue";
     }
 
-    // dice
+    // Dice
     elseif(isset($update['message']["dice"])) {
         $dice = $update["message"]["dice"];
         $MEDIA_TYPE = "dice";
     }
 
-    // caption
+    // Caption
     if(isset($update['message']['caption']))
         $caption = strip_tags($update['message']['caption']);
 
-    // message ID
+    // Message ID
     if(isset($update["message"]["message_id"]))
         $message_id = $update["message"]["message_id"];
 
@@ -301,7 +301,7 @@ function smg(int $chatID, int|string|array $text, array $menu = [], array $hard_
     $result = sm($chatID, $text, $menu, $hard_menu, $parse_mode, $link_preview, $reply_to, $protect_content, $no_parse);
     if (is_numeric($result)) {
 
-        // if global last_id is set, delete previous message
+        // If global last_id is set, delete previous message
         if (isset($GLOBALS['us'])) {
             global $us;
             if(isset($us['last_id']) and $us['last_id'] != 0) {
@@ -332,7 +332,7 @@ function smg(int $chatID, int|string|array $text, array $menu = [], array $hard_
 function forwardOrCopy(int $chatID, int $from_chatID, int $message_id, bool $use_copy = false, string $caption = ''): int|string {
     $result = null;
 
-    // try forwarding first if not forced to copy
+    // Try forwarding first if not forced to copy
     if (!$use_copy) {
         $result = forwardMessage($chatID, $from_chatID, $message_id);
     }
@@ -955,7 +955,7 @@ function sendVenue(int $chatID, float $latitude, float $longitude, string $title
  * @return bool True if user is member, false otherwise
  */
 function is_member(int $userID, int $chatID): bool {
-    if (is_admin($userID)) return True;
+    if (is_admin($userID)) return true;
 
     $args = [
         'chat_id' => $chatID,

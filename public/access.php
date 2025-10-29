@@ -1,5 +1,5 @@
 <?php
-if(!defined('MAINSTART')) { die("<b>The sender's IP has not been recognised.</br>All the actions were stopped</b>"); }
+if(!defined('MAINSTART')) { die("<b>The request source has not been recognized. Make sure to execute from the provided entry point</b>"); }
 
 if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
     $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];

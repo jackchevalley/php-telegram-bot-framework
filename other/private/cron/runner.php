@@ -32,7 +32,7 @@ while (MAINSTART) {
         $lastExecuted = $execution_memory[$file] ?
             date('Y-m-d H:i:s', $execution_memory[$file])
             : 'first run';
-        logger(" [DEBUG] Checking cron job: $paddedFile Last executed at [$lastExecuted] -> ", force_echo: True);
+        logger(" [DEBUG] Checking cron job: $paddedFile Last executed at [$lastExecuted] -> ", force_echo: true);
 
         if (
             (   // Execute every X seconds
@@ -56,7 +56,7 @@ while (MAINSTART) {
                 && (time() - $execution_memory[$file] >= 60 || $execution_memory[$file] == 0)
             )
         ) {
-            logger("EXECUTING", force_echo: True, break_line: True);
+            logger("EXECUTING", force_echo: true, break_line: true);
 
             // Run in executor to avoid wait time, no need for output
             $module_path = BASE_ROOT . '/other/private/cron/modules/'. $file;
@@ -95,7 +95,7 @@ while (MAINSTART) {
                 }
             }
 
-            logger("SKIPPING (next run in $nextRunIn seconds)", force_echo: True, break_line: True);
+            logger("SKIPPING (next run in $nextRunIn seconds)", force_echo: true, break_line: true);
         }
     }
 

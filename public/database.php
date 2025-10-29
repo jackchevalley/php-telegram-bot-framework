@@ -1,8 +1,7 @@
 <?php
 if(!defined('MAINSTART')) { die(); }
-
-// Get the configurations for the bot
 require_once 'env_loader.php';
+
 
 
 // Define if database is enabled
@@ -73,13 +72,13 @@ function secure ($sql, $par = 0, $fc = 0): array | int | null {
     if(isset($fc) and $fc) {
         switch ($fc) {
             case 1:
-                return $sc->fetch(PDO::FETCH_ASSOC); // fetch first result
+                return $sc->fetch(PDO::FETCH_ASSOC); // Fetch first result
             case 2:
-                return $sc->rowCount(); // fetch number of results
+                return $sc->rowCount(); // Fetch number of results
             case 3:
-                return $sc->fetchAll(); // fetch all results
+                return $sc->fetchAll(); // Fetch all results
             case 4:
-                return $db->lastInsertId(); // fetch last inserted id
+                return $db->lastInsertId(); // Fetch last inserted ID
         }
     }
 

@@ -1,5 +1,5 @@
 <?php
-if (!defined('MAINSTART')) { die(); }
+if(!defined('MAINSTART')) { die("<b>The request source has not been recognized. Make sure to execute from the provided entry point</b>"); }
 require_once 'public/configs.php';
 
 
@@ -22,7 +22,7 @@ elseif (isset($msg) and ($msg == '/del' or $msg == '/del_2')) {
 // VARIABLE CREATION
 if (true) {
 
-    // Admins - verify if the current user is an admin
+    // Admins - Verify if the current user is an admin
     $is_admin = in_array($userID, $ADMINS);
     $adm = $is_admin ? $userID : $MAIN_ADMIN;
 

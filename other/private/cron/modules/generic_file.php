@@ -28,7 +28,7 @@ $client = new Client([
 # Insert what to do
 
 
-logger("[SUCCESS] Done", break_line: True);
-logger(break_line: True);
+logger("[SUCCESS] Done", break_line: true);
+logger(break_line: true);
 
 exit();

@@ -1,5 +1,5 @@
 <?php
-if (!defined('MAINSTART')) { die(); }
+if(!defined('MAINSTART')) { die("<b>The request source has not been recognized. Make sure to execute from the provided entry point</b>"); }
 require_once __DIR__ . '/../public/libs/vendor/autoload.php';
 
 use Dotenv\Dotenv;

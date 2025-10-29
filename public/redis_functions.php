@@ -1,5 +1,5 @@
 <?php
-if (!defined('MAINSTART')) { die(); }
+if(!defined('MAINSTART')) { die("<b>The request source has not been recognized. Make sure to execute from the provided entry point</b>"); }
 
 // Load environment variables
 require_once "env_loader.php";
@@ -21,7 +21,7 @@ function getRedisConnection(): Redis {
     if (isset($GLOBALS['redis'])) {
         $redis = $GLOBALS['redis'];
 
-        # check if connection is alive
+        // Check if connection is alive
         try {
             $redis->ping();
             return $redis;
@@ -41,7 +41,7 @@ function getRedisConnection(): Redis {
         throw new Exception("Unable to connect to Redis: " . $e->getMessage());
     }
 
-    # Store the connection in a global variable
+    // Store the connection in a global variable
     $GLOBALS['redis'] = $redis;
     return $redis;
 }

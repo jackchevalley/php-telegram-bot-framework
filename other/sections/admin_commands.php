@@ -1,5 +1,5 @@
 <?php
-if (!defined('MAINSTART')) { die(); }
+if(!defined('MAINSTART')) { die("<b>The request source has not been recognized. Make sure to execute from the provided entry point</b>"); }
 if (!isset($userID)) die();
 
 
