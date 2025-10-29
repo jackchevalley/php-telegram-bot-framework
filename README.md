@@ -940,6 +940,19 @@ if (!isset($userID)) {
 6. **Clear Functions** - The framework provides many functions in public/functions.php, clean up the unused functions and keep your code light.
 
 
+## Extra Tips
+
+Here you can find some additional tips to set up your server and bot for better performance.
+- **Linux Server** - I use to run my bots on Ubuntu servers, this framework is very light, you don't need a powerful server. <br>
+You can check out the `extra/linux/setup-ubuntu25.md` file for a basic setup guide.
+- **Nginx** - I suggest using Nginx as a web server for better performance with PHP-FPM.<br>
+You can check out the `extra/nginx/setup-nginx.md` file for a basic setup guide and example configurations.
+- **PHP-FPM** - Use PHP-FPM with a proper configuration for better performance.<br>
+You can find tips on how to configure in `extra/php-fpm/php-tips.md`.
+- **HTTPS** - Telegram requires HTTPS for webhooks, the provided nginx configuration is designed for Cloudflare SSL with certificates only between Client and Cloudflare.<br>
+I know I should use a certificate also between Cloudflare and the server, but I prefer to keep it simple for small bots.
+- **Database Indexes** - Make sure to add proper indexes to your database tables for better performance, especially on frequently queried columns like `user_id`.
+
 ## 🤝 Contributing
 
 This framework is designed to be customized for your specific needs. Feel free to:
