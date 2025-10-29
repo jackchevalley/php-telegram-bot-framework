@@ -6,44 +6,38 @@ Designed for rapid development with built-in features and resource management.
 The framework can be easily customized to fit your bot's specific needs.
 I've been using and improving it for years, and almost every bot I create is based on this structure.
 
+
 ## 📑 Table of Contents
 
-- [✨ Features](#-features)
-- [📋 Requirements](#-requirements)
-- [🚀 Quick Start](#-quick-start)
-  - [1. Clone the Repository](#1-clone-the-repository)
-  - [2. Install Dependencies](#2-install-dependencies)
-  - [3. Configure Environment](#3-configure-environment)
-  - [4. Configure Bot Settings](#4-configure-bot-settings)
-  - [5. Setup Database](#5-setup-database-if-you-want)
-  - [6. Set Webhook](#6-set-webhook)
-  - [7. Test Your Bot](#7-test-your-bot)
+- ✨ [Features](#-features)
+- 📋 [Requirements](#-requirements)
+- 🚀 [Quick Start](#-quick-start)
+  - [Configure Environment](#3-configure-environment)
+  - [Configure Bot Settings](#4-configure-bot-settings)
+  - [Set Webhook](#6-set-webhook)
 - [📁 Project Structure](#-project-structure)
 - [🎯 Core Concepts](#-core-concepts)
   - [Message Flow](#message-flow)
-  - [Update Variables](#update-variables)
+  - [Variables from the Update](#variables-from-the-update)
   - [Sending Messages](#sending-messages)
   - [Available Message Functions](#available-message-functions)
 - [💾 Database Usage](#-database-usage)
   - [Secure Query Execution](#secure-query-execution)
   - [Fetch Modes](#fetch-modes)
-  - [Transaction Support](#transaction-support)
   - [User Management](#user-management)
-- [⏰ Cron Jobs](#-cron-jobs)
-  - [Setup Cron Runner](#setup-cron-runner)
-  - [Configure Cron Tasks](#configure-cron-tasks)
-  - [Create Cron Task](#create-cron-task)
-  - [Built-in Broadcast System](#built-in-broadcast-system)
 - [👑 Admin Commands](#-admin-commands)
-  - [Define Admin Section](#define-admin-section)
-  - [Create Admin Commands](#create-admin-commands)
-  - [System Metrics](#system-metrics)
+    - [Define Admin Section](#define-admin-section)
+    - [Create Admin Commands](#create-admin-commands)
+    - [Example: System Metrics](#system-metrics)
 - [🎨 Commands and Input Handling](#-commands-and-input-handling)
   - [Basic Command Handler](#basic-command-handler)
-  - [Using Temporary States](#using-temporary-states)
-  - [Command Aliases](#command-aliases)
-  - [Lock Callback-Only Commands](#lock-callback-only-commands)
-  - [Suggested Structure for Commands and Temporary States](#suggested-structure-for-commands-and-temporary-states)
+  - [Getting user Inputs](#user-inputs---temporary-states)
+  - [Suggested Structure for Commands](#suggested-structure-for-commands-and-temporary-states)
+- [⏰ Cron Jobs](#-cron-jobs)
+    - [Setup Cron Runner](#setup-cron-runner)
+    - [Configure Cron Tasks](#configure-cron-tasks)
+    - [Create Cron Task](#create-cron-task)
+    - [Built-in Broadcast System with cron](#built-in-broadcast-system)
 - [🔒 Security Features](#-security-features)
   - [IP Verification](#ip-verification)
   - [Strict Entry Point](#strict-entry-point)
@@ -52,11 +46,11 @@ I've been using and improving it for years, and almost every bot I create is bas
 - [📱 Handling Different Message Types](#-handling-different-message-types)
   - [Group Messages](#group-messages)
   - [Channel Posts](#channel-posts)
-- [🐛 Debugging](#-debugging)
 - [📝 Best Practices](#-best-practices)
 - [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
 - [💬 Support](#-support)
+
 
 ## ✨ Features
 
@@ -72,6 +66,7 @@ I've been using and improving it for years, and almost every bot I create is bas
 - **User management** - Automatic user registration and profile updates
 - **User blocking system** - Built-in blocked users management
 
+
 ## 📋 Requirements
 
 - PHP 8.0 or higher (I am currently working with PHP 8.4)
@@ -79,6 +74,7 @@ I've been using and improving it for years, and almost every bot I create is bas
 - Composer
 - Web server with HTTPS support (Telegram requires HTTPS for webhooks)
 - Linux server (recommended for metrics features)
+
 
 ## 🚀 Quick Start
 
@@ -168,6 +164,7 @@ This script will:
 
 Send `/start` to your bot on Telegram. You should receive a welcome message!
 
+
 ## 📁 Project Structure
 
 ```
@@ -213,6 +210,7 @@ chmod -R 600 other/private/
 ```
 This will allow the bot to write files in the data folder and keep private files safe from outside access.
 
+
 ## 🎯 Core Concepts
 
 ### Message Flow
@@ -227,7 +225,7 @@ This will allow the bot to write files in the data folder and keep private files
 8. **Send response** → Prepare and send message back to user
 9. **Close connectors** → Clean up database and HTTP connections
 
-### Update Variables
+### Variables from the Update
 
 The framework automatically extracts some variables from Telegram updates, you can find all of them in `public/functions.php`:
 
@@ -324,6 +322,7 @@ I suggest imagining the bot structure like this:
 You can find all the functions provided by the framework for sending and managing messages in the `public/functions.php` file.
 
 We have included many functions to handle various tasks, but some of them may not be needed for your specific bot. We suggest cleaning up the unused functions to keep your code light and easy to maintain.
+
 
 ## 💾 Database Usage
 
@@ -434,68 +433,6 @@ if ($us['temp'] == "waiting_for_name") {
 temp();
 ```
 
-## ⏰ Cron Jobs
-
-The framework includes a built-in cron system that runs independently.
-
-### Setup Cron Runner
-
-You should set up a Docker container to run the cron runner.
-It works in a while (true) loop, so it just needs to stay alive and automatically restart when needed.
-
-If you prefer not to use Docker, you could run it inside a screen session but that’s riskier, since the process could crash or the screen could be lost after a reboot.
-
-If your project does not require heavy cron jobs, you can discard the runner and just execute the modules when needed from a conventional cron.
-
-For example:
-```bash
-30 * * * * cd /path/to/bot/other/private/cron/modules/ && php module_to_run.php >> /dev/null 2>&1
-```
-
-### Configure Cron Tasks
-
-If you need to run multiple cron tasks with different schedules, you can use the built-in runner.
-Edit `other/private/cron/runner.php`:
-
-```php
-const ONE_MINUTE = 60;
-const FIVE_MINUTES = 300;
-const ONE_HOUR = 3600;
-
-$FILES_RUN_TIME = [
-    'task_every_minute.php'     => ONE_MINUTE,
-    'daily_cleanup.php'         => "00:01",        // At 00:01
-    'send_reminders.php'        => ["12:00", "18:00"], // Multiple times
-    'check_subscriptions.php'   => FIVE_MINUTES,
-];
-```
-
-### Create Cron Task
-
-Create a file in `other/private/cron/modules/`:
-
-```php
-<?php
-// other/private/cron/modules/send_daily_report.php
-
-if(!defined('MAINSTART')) { die("<b>The request source has not been recognized. Make sure to execute from the provided entry point</b>"); }
-
-// Your task logic here
-$users = secure("SELECT * FROM users WHERE attivo = 1", 0, 3);
-
-foreach ($users as $user) {
-    sm($user['user_id'], "Daily report: ...");
-}
-
-logger("Daily report sent to " . count($users) . " users");
-```
-
-
-### Built-in Broadcast System
-
-We have included a broadcast module that can be used to send messages to all users in the database.
-You can find it in `other/private/cron/modules/broadcast.php`.
-For now, it's fairly basic and not implemented in the admin commands, but you can easily customize it to your needs.
 
 ## 👑 Admin Commands
 
@@ -550,6 +487,7 @@ The built-in `/status` command shows:
 
 The limits for warnings and critical alerts should be edited by you according to your server specifications.
 
+
 ## 🎨 Commands and Input Handling
 
 The framework, after initializing variables, routes all commands and messages to `comandi.php`.
@@ -591,7 +529,7 @@ if ($msg == "/start") {
 }
 ```
 
-### Using Temporary States
+### User Inputs - Temporary States
 
 ```php
 # In the command section 
@@ -821,6 +759,71 @@ Using clear sectioning helps you:
 - Easily find and modify specific features
 - Handle complex navigation flows with clarity
 
+
+## ⏰ Cron Jobs
+
+The framework includes a built-in cron system that runs independently.
+
+### Setup Cron Runner
+
+You should set up a Docker container to run the cron runner.
+It works in a while (true) loop, so it just needs to stay alive and automatically restart when needed.
+
+If you prefer not to use Docker, you could run it inside a screen session but that’s riskier, since the process could crash or the screen could be lost after a reboot.
+
+If your project does not require heavy cron jobs, you can discard the runner and just execute the modules when needed from a conventional cron.
+
+For example:
+```bash
+30 * * * * cd /path/to/bot/other/private/cron/modules/ && php module_to_run.php >> /dev/null 2>&1
+```
+
+### Configure Cron Tasks
+
+If you need to run multiple cron tasks with different schedules, you can use the built-in runner.
+Edit `other/private/cron/runner.php`:
+
+```php
+const ONE_MINUTE = 60;
+const FIVE_MINUTES = 300;
+const ONE_HOUR = 3600;
+
+$FILES_RUN_TIME = [
+    'task_every_minute.php'     => ONE_MINUTE,
+    'daily_cleanup.php'         => "00:01",        // At 00:01
+    'send_reminders.php'        => ["12:00", "18:00"], // Multiple times
+    'check_subscriptions.php'   => FIVE_MINUTES,
+];
+```
+
+### Create Cron Task
+
+Create a file in `other/private/cron/modules/`:
+
+```php
+<?php
+// other/private/cron/modules/send_daily_report.php
+
+if(!defined('MAINSTART')) { die("<b>The request source has not been recognized. Make sure to execute from the provided entry point</b>"); }
+
+// Your task logic here
+$users = secure("SELECT * FROM users WHERE attivo = 1", 0, 3);
+
+foreach ($users as $user) {
+    sm($user['user_id'], "Daily report: ...");
+}
+
+logger("Daily report sent to " . count($users) . " users");
+```
+
+
+### Built-in Broadcast System
+
+We have included a broadcast module that can be used to send messages to all users in the database.
+You can find it in `other/private/cron/modules/broadcast.php`.
+For now, it's fairly basic and not implemented in the admin commands, but you can easily customize it to your needs.
+
+
 ## 🔒 Security Features
 
 ### IP Verification
@@ -909,14 +912,6 @@ if (!isset($userID)) {
 ```
 
 
-## 🐛 Debugging
-
-### Error Reporting
-
-Errors are automatically sent to the main admin when testing out.
-
-You can add error reporting in the index.php to store logs in a selected file.
-
 ## 📝 Best Practices
 
 1. **Always use prepared statements** - Never concatenate SQL queries
@@ -936,10 +931,12 @@ This framework is designed to be customized for your specific needs. Feel free t
 - Extend database schema in `data/`
 - Add cron tasks in `other/private/cron/modules/`
 
+
 ## 📄 License
 
 This framework is provided as is for building Telegram bots.
 You are free to use and modify it for both personal and commercial projects.
+
 
 ## 💬 Support
 
