@@ -1,32 +1,36 @@
-# Nginx Setup Guide for Telegram Bot Webhook
+# 🚀 Nginx Setup Guide for Telegram Bot
 
-This guide explains how to install and configure Nginx with a secure default server that blocks unwanted access and dedicated virtual hosts for your bot webhooks.
+Complete guide for configuring Nginx with PHP-FPM to host your Telegram bot webhook.
 
-Written for Ubuntu/Debian systems but adaptable to others.
+## 📑 Table of Contents
 
-## Why This Configuration?
-
-- **Security First**: The default server blocks direct IP access and requests from non-configured domains
-- **Multiple Bots**: Easily run multiple bot webhooks on different domains from the same server
-- **Protection**: Prevents unauthorized access and scanning attempts
-
----
-
-## Table of Contents
-
-1. [Installation](#installation)
-2. [Configuration Structure](#configuration-structure)
-3. [Setup Default Blocking Server](#setup-default-blocking-server)
-4. [Setup Bot Webhook Domain](#setup-bot-webhook-domain)
-5. [Adding Multiple Domains](#adding-multiple-domains)
-6. [SSL/HTTPS Setup](#sslhttps-setup)
-7. [Testing and Troubleshooting](#testing-and-troubleshooting)
+- [Prerequisites](#prerequisites)
+- [Install Nginx](#install-nginx)
+- [Basic Nginx Configuration](#basic-nginx-configuration)
+- [Setup Default Blocking Server](#setup-default-blocking-server)
+- [Setup Bot Webhook Domain](#setup-bot-webhook-domain)
+- [Adding Multiple Domains](#adding-multiple-domains)
+- [SSL/HTTPS Setup](#sslhttps-setup)
+- [Testing and Troubleshooting](#testing-and-troubleshooting)
+- [Security Best Practices](#security-best-practices)
+- [Quick Reference Commands](#quick-reference-commands)
 
 ---
 
-## Installation
+## Prerequisites
 
-### Ubuntu/Debian
+Before configuring Nginx, ensure you have:
+
+- Ubuntu server set up ([Linux Setup Guide](../linux/setup-ubuntu25.md))
+- PHP 8.4 and PHP-FPM installed
+- Domain name pointed to your server (for SSL)
+- Bot webhook URL ready
+
+---
+
+## Install Nginx
+
+If you haven't installed Nginx yet:
 
 ```bash
 # Update package list
@@ -48,7 +52,7 @@ sudo systemctl enable nginx
 
 ---
 
-## Configuration Structure
+## Basic Nginx Configuration
 
 Nginx uses two main directories for configurations:
 

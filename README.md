@@ -51,6 +51,7 @@ I've been using and improving it for years, and almost every bot I create is bas
 - 📄 [License](#-license)
 - 💬 [Support](#-support)
 
+---
 
 ## ✨ Features
 
@@ -66,6 +67,7 @@ I've been using and improving it for years, and almost every bot I create is bas
 - **User management** - Automatic user registration and profile updates
 - **User blocking system** - Built-in blocked users management
 
+---
 
 ## 📋 Requirements
 
@@ -75,6 +77,7 @@ I've been using and improving it for years, and almost every bot I create is bas
 - Web server with HTTPS support (Telegram requires HTTPS for webhooks)
 - Linux server (recommended for metrics features)
 
+---
 
 ## 🚀 Quick Start
 
@@ -181,6 +184,7 @@ To keep everything clean, you can also remove this README file if you want.
 
 Send `/start` to your bot on Telegram. You should receive a welcome message!
 
+---
 
 ## 📁 Project Structure
 
@@ -228,6 +232,7 @@ chmod -R 600 other/private/
 ```
 This will allow the bot to write files in the data folder and keep private files safe from outside access.
 
+---
 
 ## 🎯 Core Concepts
 
@@ -341,6 +346,7 @@ You can find all the functions provided by the framework for sending and managin
 
 We have included many functions to handle various tasks, but some of them may not be needed for your specific bot. We suggest cleaning up the unused functions to keep your code light and easy to maintain.
 
+---
 
 ## 💾 Database Usage
 
@@ -451,6 +457,7 @@ if ($us['temp'] == "waiting_for_name") {
 temp();
 ```
 
+---
 
 ## 👑 Admin Commands
 
@@ -505,6 +512,7 @@ The built-in `/status` command shows:
 
 The limits for warnings and critical alerts should be edited by you according to your server specifications.
 
+---
 
 ## 🎨 Commands and Input Handling
 
@@ -777,6 +785,7 @@ Using clear sectioning helps you:
 - Easily find and modify specific features
 - Handle complex navigation flows with clarity
 
+---
 
 ## ⏰ Cron Jobs
 
@@ -841,6 +850,7 @@ We have included a broadcast module that can be used to send messages to all use
 You can find it in `other/private/cron/modules/broadcast.php`.
 For now, it's fairly basic and not implemented in the admin commands, but you can easily customize it to your needs.
 
+---
 
 ## 🔒 Security Features
 
@@ -904,6 +914,7 @@ secure("INSERT INTO blocked_users (user_id, by_user_id) VALUES (:uid, :aid)", [
 // The framework will automatically block any interaction from that user, you can check it out in comandi.php
 ```
 
+---
 
 ## 📱 Handling Different Message Types
 
@@ -929,6 +940,8 @@ if (!isset($userID)) {
 }
 ```
 
+---
+
 
 ## 📝 Best Practices
 
@@ -939,19 +952,34 @@ if (!isset($userID)) {
 5. **Sanitize input** - Even though framework does it, be careful with user data
 6. **Clear Functions** - The framework provides many functions in public/functions.php, clean up the unused functions and keep your code light.
 
+---
 
-## Extra Tips
+
+## 💡 Extra Tips
 
 Here you can find some additional tips to set up your server and bot for better performance.
-- **Linux Server** - I use to run my bots on Ubuntu servers, this framework is very light, you don't need a powerful server. <br>
-You can check out the `extra/linux/setup-ubuntu25.md` file for a basic setup guide.
-- **Nginx** - I suggest using Nginx as a web server for better performance with PHP-FPM.<br>
-You can check out the `extra/nginx/setup-nginx.md` file for a basic setup guide and example configurations.
-- **PHP-FPM** - Use PHP-FPM with a proper configuration for better performance.<br>
-You can find tips on how to configure in `extra/php-fpm/php-tips.md`.
-- **HTTPS** - Telegram requires HTTPS for webhooks, the provided nginx configuration is designed for Cloudflare SSL with certificates only between Client and Cloudflare.<br>
-I know I should use a certificate also between Cloudflare and the server, but I prefer to keep it simple for small bots.
-- **Database Indexes** - Make sure to add proper indexes to your database tables for better performance, especially on frequently queried columns like `user_id`.
+
+### 🐧 Linux Server Setup
+I use to run my bots on Ubuntu servers. This framework is very light, you don't need a powerful server.
+
+**Check out the complete guide:** [setup-ubuntu25](extra/linux/setup-ubuntu25.md)
+
+This will helpn you set up a basic Ubuntu server with all the necessary components to run your bot smoothly.
+
+### 🚀 Nginx Configuration
+I suggest using Nginx as a web server for better performance with PHP-FPM.
+
+**Check out the complete guide:** [setup-nginx](extra/nginx/setup-nginx.md)
+
+
+
+### ⚡ PHP-FPM Optimization
+Use PHP-FPM with a proper configuration for better performance.
+
+**Check out the complete guide:** [php-tips](extra/php-fpm/php-tips.md)
+
+---
+
 
 ## 🤝 Contributing
 
