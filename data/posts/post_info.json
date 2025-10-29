@@ -1,0 +1,14 @@
+{
+	"ready": false,
+	"send_at": null,
+	"message_id": 1312,
+	"chat_id": 123456789,
+	"inline_keyboard": [
+		[
+			{
+				"text": "Visit my Channel!",
+				"url": "https:\/\/t.me\/JacksWork"
+			}
+		]
+	]
+}
