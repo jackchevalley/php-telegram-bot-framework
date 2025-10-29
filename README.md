@@ -1,10 +1,62 @@
 # 🤖 Telegram Bot PHP Framework
 
 A lightweight, modular PHP framework for building Telegram bots with webhook support. 
-Designed for rapid development with built-in features and resources management.
+Designed for rapid development with built-in features and resource management.
 
 The framework can be easily customized to fit your bot's specific needs.
-I've been using and improving it for years and almost every bot I create is based on this structure.
+I've been using and improving it for years, and almost every bot I create is based on this structure.
+
+## 📑 Table of Contents
+
+- [✨ Features](#-features)
+- [📋 Requirements](#-requirements)
+- [🚀 Quick Start](#-quick-start)
+  - [1. Clone the Repository](#1-clone-the-repository)
+  - [2. Install Dependencies](#2-install-dependencies)
+  - [3. Configure Environment](#3-configure-environment)
+  - [4. Configure Bot Settings](#4-configure-bot-settings)
+  - [5. Setup Database](#5-setup-database-if-you-want)
+  - [6. Set Webhook](#6-set-webhook)
+  - [7. Test Your Bot](#7-test-your-bot)
+- [📁 Project Structure](#-project-structure)
+- [🎯 Core Concepts](#-core-concepts)
+  - [Message Flow](#message-flow)
+  - [Update Variables](#update-variables)
+  - [Sending Messages](#sending-messages)
+  - [Available Message Functions](#available-message-functions)
+- [💾 Database Usage](#-database-usage)
+  - [Secure Query Execution](#secure-query-execution)
+  - [Fetch Modes](#fetch-modes)
+  - [Transaction Support](#transaction-support)
+  - [User Management](#user-management)
+- [⏰ Cron Jobs](#-cron-jobs)
+  - [Setup Cron Runner](#setup-cron-runner)
+  - [Configure Cron Tasks](#configure-cron-tasks)
+  - [Create Cron Task](#create-cron-task)
+  - [Built-in Broadcast System](#built-in-broadcast-system)
+- [👑 Admin Commands](#-admin-commands)
+  - [Define Admin Section](#define-admin-section)
+  - [Create Admin Commands](#create-admin-commands)
+  - [System Metrics](#system-metrics)
+- [🎨 Commands and Input Handling](#-commands-and-input-handling)
+  - [Basic Command Handler](#basic-command-handler)
+  - [Using Temporary States](#using-temporary-states)
+  - [Command Aliases](#command-aliases)
+  - [Lock Callback-Only Commands](#lock-callback-only-commands)
+  - [Suggested Structure for Commands and Temporary States](#suggested-structure-for-commands-and-temporary-states)
+- [🔒 Security Features](#-security-features)
+  - [IP Verification](#ip-verification)
+  - [Strict Entry Point](#strict-entry-point)
+  - [Input Sanitization](#input-sanitization)
+  - [Blocked Users](#blocked-users)
+- [📱 Handling Different Message Types](#-handling-different-message-types)
+  - [Group Messages](#group-messages)
+  - [Channel Posts](#channel-posts)
+- [🐛 Debugging](#-debugging)
+- [📝 Best Practices](#-best-practices)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [💬 Support](#-support)
 
 ## ✨ Features
 
@@ -22,7 +74,7 @@ I've been using and improving it for years and almost every bot I create is base
 
 ## 📋 Requirements
 
-- PHP 8.0 or higher (I am currently working with PHP8.4)
+- PHP 8.0 or higher (I am currently working with PHP 8.4)
 - MySQL/MariaDB (optional, can be disabled)
 - Composer
 - Web server with HTTPS support (Telegram requires HTTPS for webhooks)
@@ -85,7 +137,7 @@ $ADMIN_CHATS = [
 ];
 ```
 
-Here you have the main bot settings that should be easily and quickly accessible, that's why they are not in `data/.env`
+These are the main bot settings that should be easily and quickly accessible, which is why they are not in `data/.env`.
 
 ### 5. Setup Database (if you want)
 
@@ -145,14 +197,14 @@ Send `/start` to your bot on Telegram. You should receive a welcome message!
 │       ├── channels.php     # Channel message handlers
 │       └── groups.php       # Group message handlers
 ```
-I use to structure the bot files this way:
+I structure the bot files this way:
 - `index.php`: Main entry point for webhook updates
 - `comandi.php`: Main command and input handler
-- `data/`: Folder to store/write files, such as language files, configurations ecc.. 
+- `data/`: Folder to store/write files, such as language files, configurations, etc.
 - `public/`: Core bot files and configurations, includes all necessary functions that could be used anywhere
-- `other/`: Additional code login, not functions
-- `other/sections/`: Handlers for specific messages such as admin commands, groups/channels messages and more.
-- `other/private/`: Private code that should not be accessibile from outside, such as cron jobs or any other background tasks
+- `other/`: Additional code logic, not functions
+- `other/sections/`: Handlers for specific messages such as admin commands, groups/channels messages, and more
+- `other/private/`: Private code that should not be accessible from outside, such as cron jobs or any other background tasks
 
 In order to keep it functional as it should be, make sure to set permissions like this to the folders:
 ```bash
@@ -205,7 +257,7 @@ sm($chatID, "Hello World!");
 ```
 The `sm()` function sends a message to the specified chat ID.
 It accepts strings or arrays (for multi-line messages).
-It can be useful to create big messages easily.
+It can be useful for creating big messages easily.
 ```php
 $output_text = [];
 $output_text[] = "Hello World!";
@@ -264,21 +316,21 @@ smg($chatID, "Updated message", $inline_menu);
 
 This can be very useful to keep the chat clean when navigating menus or updating information.
 I suggest imagining the bot structure like this:
-- **Main section messages**: Use `smg()` to always have only one message per section. This prevents users from clicking old buttons, going back and forth, and potentially creating conflicts. For example with input requests.
+- **Main section messages**: Use `smg()` to always have only one message per section. This prevents users from clicking old buttons, going back and forth, and potentially creating conflicts, for example with input requests.
 - **Subsection messages**: Use normal `sm()` messages to provide additional information without deleting the main section message. 
 
 ### Available Message Functions
 
 You can find all the functions provided by the framework for sending and managing messages in the `public/functions.php` file.
 
-We have included many functions to handle many things but probably some of them are not needed for your specific bot, we suggest to clean up the unused functions to keep your code light and easy to maintain.
+We have included many functions to handle various tasks, but some of them may not be needed for your specific bot. We suggest cleaning up the unused functions to keep your code light and easy to maintain.
 
 ## 💾 Database Usage
 
 ### Secure Query Execution
 
 The framework provides a `secure()` function for safe database queries.
-You don't need to perform manual connection or prepare statements, just call the secure function and it will take care of connection, preparing and executing the query.
+You don't need to perform manual connection or prepare statements; just call the secure function, and it will take care of the connection, preparing, and executing the query.
 
 ```php
 // Execute query without results
@@ -362,7 +414,7 @@ The framework automatically:
 - Stores temporary states in `temp` column
 - Tracks last message ID for cleanup
 
-The temporary state (`temp` column) can be used to manage multi-step interactions with users.
+The temporary state (`temp` column) can be used to manage multistep interactions with users.
 For example, a user clicks a button where it asks for an input, you can set a temporary state to wait for that input.
 
 ```php
@@ -388,9 +440,12 @@ The framework includes a built-in cron system that runs independently.
 
 ### Setup Cron Runner
 
-You should set up a docker container to run the cron runner, it runs in while True so it just need to keep running and reboot when needed.
+You should set up a Docker container to run the cron runner.
+It works in a while (true) loop, so it just needs to stay alive and automatically restart when needed.
 
-If your project does not require heavy cron jobs you can discard the runner and just execute the modules when needed from conventional cron.
+If you prefer not to use Docker, you could run it inside a screen session but that’s riskier, since the process could crash or the screen could be lost after a reboot.
+
+If your project does not require heavy cron jobs, you can discard the runner and just execute the modules when needed from a conventional cron.
 
 For example:
 ```bash
@@ -417,7 +472,7 @@ $FILES_RUN_TIME = [
 
 ### Create Cron Task
 
-Create file in `other/private/cron/modules/`:
+Create a file in `other/private/cron/modules/`:
 
 ```php
 <?php
@@ -440,7 +495,7 @@ logger("Daily report sent to " . count($users) . " users");
 
 We have included a broadcast module that can be used to send messages to all users in the database.
 You can find it in `other/private/cron/modules/broadcast.php`.
-For now it's fairly basic and not implemented in the admin commands, but you can easily customize it to your needs.
+For now, it's fairly basic and not implemented in the admin commands, but you can easily customize it to your needs.
 
 ## 👑 Admin Commands
 
@@ -498,7 +553,7 @@ The limits for warnings and critical alerts should be edited by you according to
 ## 🎨 Commands and Input Handling
 
 The framework, after initializing variables, routes all commands and messages to `comandi.php`.
-Here it will populate some more variables used only in the commands handling *(the if(true) is just to collapse the code in IDEs)*. 
+Here it will populate some more variables used only in the commands handling *(the `if(true)` is just to collapse the code in IDEs)*. 
 
 The code structure splits between messages and media, since messages could be commands but media cannot. 
 
@@ -512,7 +567,7 @@ If you are using a Reply Keyboard, you can map buttons to commands using the `$C
 // In comandi.php
 
 if ($msg == "/start") {
-    $text = []
+    $text = [];
     $text[] = "<b>Welcome <a href='tg://user?id=$userID'>$name</a>!</b>";
     $text[] = "";
     $text[] = "This is a sample bot built with the Telegram Bot PHP Framework.";
@@ -528,7 +583,7 @@ if ($msg == "/start") {
         // Called from callback, we have to edit the message and answer the callback.
         cb_reply($text, $inline_menu);
     } else {
-        // Called from text message, we have to send a new message. since the /start is a main section message (it has buttons to navigate), we use smg(
+        // Called from text message, we have to send a new message. Since the /start is a main section message (it has buttons to navigate), we use smg()
         smg($chatID, $text, $inline_menu);
     }
     
@@ -894,8 +949,8 @@ For issues or questions about the framework structure, check:
 - Guzzle HTTP Client: https://docs.guzzlephp.org/
 - My Development channel: https://t.me/JacksWork
 
-I hope this will help you create amazing bots or even starting your own coding journey.
-I’ll always be grateful to the open-source framework that helped me when I began programming many years ago. 
+I hope this will help you create amazing bots or even start your own coding journey.
+I'll always be grateful to the open-source framework that helped me when I began programming many years ago. 
 Today, I enjoy my work thanks to that code and the people who shared it.
 
 ---
