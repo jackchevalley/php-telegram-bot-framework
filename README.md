@@ -164,6 +164,8 @@ The framework includes two tables:
 - `users` - Store user information and temporary states
 - `blocked_users` - Manage blocked users
 
+Remember to set the correct database credentials in `data/.env` and enable the database usage by setting `DB_ENABLED=true`.
+
 ### 6. Set Webhook
 
 Run the webhook setup script:
