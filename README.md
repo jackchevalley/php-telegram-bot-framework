@@ -62,10 +62,19 @@ I've been using and improving it for years, and almost every bot I create is bas
 
 ### 1. Clone the Repository
 
+You should clone this repo in the folder visible to the web. <br>
+For the nginx configuration provided, it should be in `/var/www/html/`.
+
 ```bash
+cd /var/www/html/
 git clone https://github.com/jackchevalley/php-telegram-bot-framework.git
 mv php-telegram-bot-framework my-project-name
 cd my-project-name
+```
+
+Since we have called the folder `my-project-name`, the webhook URL will be:
+```
+https://your-domain.com/my-project-name/index.php
 ```
 
 ### 2. Install Dependencies
