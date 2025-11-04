@@ -201,7 +201,7 @@ Send `/start` to your bot on Telegram. You should receive a welcome message!
 
 ```
 ├── index.php                # Main webhook entry point
-├── comandi.php              # Command handlers and routing
+├── commands.php              # Command handlers and routing
 ├── delupdates.php           # Webhook setup script
 ├── data/
 │   └── posts/               # Example data storage folder
@@ -234,7 +234,7 @@ Send `/start` to your bot on Telegram. You should receive a welcome message!
 **File Structure Explanation:**
 
 - `index.php`: Main entry point for webhook updates
-- `comandi.php`: Main command and input handler
+- `commands.php`: Main command and input handler
 - `delupdates.php`: Webhook setup utility script
 - `data/`: Folder to store/write files, such as `.env`, language files, user data, etc.
 - `extra/`: Folder with setup guides and example files from the repository, <u>should be deleted</u> after setup
@@ -266,7 +266,7 @@ This will allow the bot to write files in the data folder while keeping private 
 3. **Fast response to Telegram** → Connection closed immediately
 4. **Parse update data** → Extract message, user info, etc. (`public/functions.php`)
 5. **Load classes and connectors** → Environment, Database, HTTP client, Redis (if used)
-6. **Route to handler** → `comandi.php`
+6. **Route to handler** → `commands.php`
 7. **Process command** → Execute bot logic or redirect to sections
 8. **Send response** → Prepare and send message back to user
 9. **Close connectors** → Clean up database and HTTP connections
@@ -542,7 +542,7 @@ The limits for warnings and critical alerts should be edited by you according to
 
 ## 🎨 Commands and Input Handling
 
-The framework, after initializing variables, routes all commands and messages to `comandi.php`.
+The framework, after initializing variables, routes all commands and messages to `commands.php`.
 Here it will populate some more variables used only in the commands handling *(the `if(true)` is just to collapse the code in IDEs)*.
 
 The code structure splits between messages and media, since messages could be commands but media cannot.
@@ -554,7 +554,7 @@ If you are using a Reply Keyboard, you can map buttons to commands using the `$C
 ### Basic Command Handler
 
 ```php
-// In comandi.php
+// In commands.php
 
 if ($msg == "/start") {
     $text = [];
@@ -939,7 +939,7 @@ secure("INSERT INTO blocked_users (user_id, by_user_id) VALUES (:uid, :aid)", [
     'uid' => $blocked_user_id,
     'aid' => $admin_id
 ]);
-// The framework will automatically block any interaction from that user, you can check it out in comandi.php
+// The framework will automatically block any interaction from that user, you can check it out in commands.php
 ```
 
 ---

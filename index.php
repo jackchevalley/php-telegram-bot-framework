@@ -87,7 +87,7 @@ require_once 'public/database.php';
 ####################################################################
 # | Command Processing
 try {
-    require_once 'comandi.php';
+    require_once 'commands.php';
 }
 finally {
     closeDbConnection();
