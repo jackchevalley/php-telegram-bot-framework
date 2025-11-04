@@ -77,6 +77,26 @@ Since we have called the folder `my-project-name`, the webhook URL will be:
 https://your-domain.com/my-project-name/index.php
 ```
 
+I suggest splitting projects in different folders for better organization.
+
+For example, create a folder for each customer and inside it, create a folder for each bot/project.
+This will result in a structure like this:
+```
+/var/www/html/
+    /customer1/
+        /bot1/
+        /bot2/
+    /customer2/
+        /bot1/
+```
+
+And the webhook URLs will be:
+```
+https://your-domain.com/customer1/bot1/index.php
+https://your-domain.com/customer1/bot2/index.php
+https://your-domain.com/customer2/bot1/index.php    
+```
+
 ### 2. Install Dependencies
 
 ```bash
